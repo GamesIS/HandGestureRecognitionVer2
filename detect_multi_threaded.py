@@ -1,24 +1,113 @@
-from utils import detector_utils as detector_utils
-import cv2
-import tensorflow as tf
-import multiprocessing
-from multiprocessing import Queue, Pool
-import time
-from utils.detector_utils import WebcamVideoStream
-import datetime
 import argparse
+import datetime
+from multiprocessing import Queue, Pool
+
+import cv2
+import numpy as np
+import tensorflow as tf
+
+from utils import detector_utils as detector_utils
+from utils.detector_utils import WebcamVideoStream
 
 frame_processed = 0
-score_thresh = 0.15
+score_thresh = 0.2
+
 
 # Create a worker thread that loads graph and
 # does detection on images in an input queue and puts it on an output queue
+
+def non_max_suppression_with_tf(sess, boxes, scores, max_output_size, iou_threshold=0.5):
+    '''
+    Provide a tensorflow session and get non-maximum suppression
+
+    max_output_size, iou_threshold are passed to tf.image.non_max_suppression
+    '''
+    non_max_idxs = tf.image.non_max_suppression(boxes, scores, max_output_size, iou_threshold=iou_threshold)
+    new_boxes = tf.cast(tf.gather(boxes, non_max_idxs), tf.int32)
+    new_scores = tf.gather(scores, non_max_idxs)
+
+    return sess.run([new_boxes, new_scores])
+
+
+def non_max_suppression(boxes, scores, threshold):
+    assert boxes.shape[0] == scores.shape[0]
+    # bottom-left origin
+    ys1 = boxes[:, 0]
+    xs1 = boxes[:, 1]
+    # top-right target
+    ys2 = boxes[:, 2]
+    xs2 = boxes[:, 3]
+    # box coordinate ranges are inclusive-inclusive
+    areas = (ys2 - ys1) * (xs2 - xs1)
+    scores_indexes = scores.argsort().tolist()
+    boxes_keep_index = []
+    while len(scores_indexes):
+        index = scores_indexes.pop()
+        boxes_keep_index.append(index)
+        if not len(scores_indexes):
+            break
+        ious = compute_iou(boxes[index], boxes[scores_indexes], areas[index],
+                           areas[scores_indexes])
+        filtered_indexes = set((ious > threshold).nonzero()[0])
+        # if there are no more scores_index
+        # then we should pop it
+        scores_indexes = [
+            v for (i, v) in enumerate(scores_indexes)
+            if i not in filtered_indexes
+        ]
+    return np.array(boxes_keep_index)
+
+
+def compute_iou(box, boxes, box_area, boxes_area):
+    # this is the iou of the box against all other boxes
+    assert boxes.shape[0] == boxes_area.shape[0]
+    # get all the origin-ys
+    # push up all the lower origin-xs, while keeping the higher origin-xs
+    ys1 = np.maximum(box[0], boxes[:, 0])
+    # get all the origin-xs
+    # push right all the lower origin-xs, while keeping higher origin-xs
+    xs1 = np.maximum(box[1], boxes[:, 1])
+    # get all the target-ys
+    # pull down all the higher target-ys, while keeping lower origin-ys
+    ys2 = np.minimum(box[2], boxes[:, 2])
+    # get all the target-xs
+    # pull left all the higher target-xs, while keeping lower target-xs
+    xs2 = np.minimum(box[3], boxes[:, 3])
+    # each intersection area is calculated by the
+    # pulled target-x minus the pushed origin-x
+    # multiplying
+    # pulled target-y minus the pushed origin-y
+    # we ignore areas where the intersection side would be negative
+    # this is done by using maxing the side length by 0
+    intersections = np.maximum(ys2 - ys1, 0) * np.maximum(xs2 - xs1, 0)
+    # each union is then the box area
+    # added to each other box area minusing their intersection calculated above
+    unions = box_area + boxes_area - intersections
+    # element wise division
+    # if the intersection is 0, then their ratio is 0
+    ious = intersections / unions
+    return ious
+
+
+def my_non_max_supression(boxes, scores, treshold_IoU):
+    supressionIDs = non_max_suppression(boxes, scores, treshold_IoU)
+    tmp_box = []
+    tmp_score = []
+    tmp_box.append(boxes[supressionIDs[0]])
+    tmp_box.append(boxes[supressionIDs[1]])
+    tmp_score.append(scores[supressionIDs[0]])
+    tmp_score.append(scores[supressionIDs[1]])
+    scores = np.array(tmp_score)
+    boxes = np.array(tmp_box)
+    return [boxes, scores]
+
+
 def worker(input_q, output_q, cap_params, frame_processed):
     print(">> loading frozen model for worker")
     detection_graph, sess = detector_utils.load_inference_graph()
     sess = tf.Session(graph=detection_graph)
     while True:
-        #print("> ===== in worker loop, frame ", frame_processed)
+        # print("> ===== in worker loop, frame ", frame_processed)
         frame = input_q.get()
         if (frame is not None):
             # Actual detection. Variable boxes contains the bounding box cordinates for hands detected,
@@ -27,6 +116,8 @@ def worker(input_q, output_q, cap_params, frame_processed):
 
             boxes, scores = detector_utils.detect_objects(
                 frame, detection_graph, sess)
+            # boxes, scores = my_non_max_supression(boxes, scores, 0.5) TODO доделать возможно добавить изначально проверку на Score выбрать два бокса(количество рук), а после в non_max_supression
+
             # draw bounding boxes
             detector_utils.draw_box_on_image(
                 cap_params['num_hands_detect'], cap_params["score_thresh"],
@@ -55,7 +146,7 @@ if __name__ == '__main__':
         '--num_hands',
         dest='num_hands',
         type=int,
-        default=1,
+        default=2,
         help='Max number of hands to detect.')
     parser.add_argument(
         '-fps',
@@ -69,14 +160,14 @@ if __name__ == '__main__':
         '--width',
         dest='width',
         type=int,
-        default=300,
+        default=600,
         help='Width of the frames in the video stream.')
     parser.add_argument(
         '-ht',
         '--height',
         dest='height',
         type=int,
-        default=200,
+        default=400,
         help='Height of the frames in the video stream.')
     parser.add_argument(
         '-ds',

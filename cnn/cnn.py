@@ -1,22 +1,23 @@
+import os
+import sys
+
 import keras
-from keras.datasets import mnist
-from keras.models import Sequential
-from keras.layers import Dense, Dropout, Flatten, Activation
-from keras.layers import Conv2D, MaxPooling2D
-from keras import backend as K
-from keras.layers.normalization import BatchNormalization
 import matplotlib.pyplot as plt
 import numpy as np
+from keras import backend as K
+from keras.layers import Conv2D, MaxPooling2D
+from keras.layers import Dense, Dropout, Flatten
+from keras.models import Sequential
 
-import os,sys
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 import buildPosesDataset as dataset
 
+
 def train():
     batch_size = 128
-    epochs = 10
+    epochs = 3
     learning_rate = 0.01
-    model_name = "cnn/models/hand_poses_wGarbage_" + str(epochs) + ".h5"
+    model_name = "models/hand_poses_wGarbage_" + str(epochs) + ".h5"
 
     # input image dimensions
     img_rows, img_cols = 28, 28
@@ -43,13 +44,14 @@ def train():
     y_train = keras.utils.to_categorical(y_train, num_classes)
     y_test = keras.utils.to_categorical(y_test, num_classes)
 
+    #model.load_weights("models/hand_poses_wGarbage_" + str(epochs) + ".h5")
     ####### Model structure #######
-    #model building
+    # model building
     model = Sequential()
-    #convolutional layer with rectified linear unit activation
+    # convolutional layer with rectified linear unit activation
     model.add(Conv2D(32, kernel_size=(3, 3),
-                    activation='relu',
-                    input_shape=input_shape))
+                     activation='relu',
+                     input_shape=input_shape))
     # 32 convolution filters used each of size 3x3
     # again
     model.add(Conv2D(64, (3, 3), activation='relu'))
@@ -68,15 +70,15 @@ def train():
     model.add(Dense(num_classes, activation='softmax'))
     # categorical ce since we have multiple classes (10)
     model.compile(loss=keras.losses.categorical_crossentropy,
-                optimizer=keras.optimizers.Adam(lr=learning_rate),
-                metrics=['accuracy'])
+                  optimizer=keras.optimizers.Adam(lr=learning_rate),
+                  metrics=['accuracy'])
 
     ####### TRAINING #######
     hist = model.fit(x_train, y_train,
-            batch_size=batch_size,
-            epochs=epochs,
-            verbose=2,
-            validation_data=(x_test, y_test))
+                     batch_size=batch_size,
+                     epochs=epochs,
+                     verbose=2,
+                     validation_data=(x_test, y_test))
     # Evaluation
     score = model.evaluate(x_test, y_test, verbose=1)
 
@@ -86,7 +88,7 @@ def train():
 
     # plotting the metrics
     fig = plt.figure()
-    plt.subplot(2,1,1)
+    plt.subplot(2, 1, 1)
     plt.plot(hist.history['acc'])
     plt.plot(hist.history['val_acc'])
     plt.title('model accuracy')
@@ -94,7 +96,7 @@ def train():
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='lower right')
 
-    plt.subplot(2,1,2)
+    plt.subplot(2, 1, 2)
     plt.plot(hist.history['loss'])
     plt.plot(hist.history['val_loss'])
     plt.title('model loss')
@@ -104,6 +106,7 @@ def train():
 
     plt.tight_layout()
     plt.show()
+
 
 if __name__ == "__main__":
     train()
