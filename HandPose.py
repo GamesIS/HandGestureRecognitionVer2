@@ -64,8 +64,7 @@ def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_
     sess.close()
 
 
-if __name__ == '__main__':
-
+def start():
     parser = argparse.ArgumentParser()
     parser.add_argument(
         '-src',
@@ -234,3 +233,7 @@ if __name__ == '__main__':
     pool.terminate()
     video_capture.stop()
     cv2.destroyAllWindows()
+
+
+if __name__ == '__main__':
+    start()
