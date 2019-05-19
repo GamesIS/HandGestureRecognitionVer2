@@ -5,6 +5,8 @@ import tensorflow as tf
 import os; os.environ['KERAS_BACKEND'] = 'tensorflow'
 import keras
 
+size_image = 28
+
 def load_KerasGraph(path): 
     print("> ====== loading Keras model for classification")
     thread_graph = Graph()
@@ -23,12 +25,12 @@ def classify(model, graph, sess, im):
     im = cv2.flip(im, 1)
 
     # Reshape
-    res = cv2.resize(im, (28,28), interpolation=cv2.INTER_AREA)
+    res = cv2.resize(im, (size_image,size_image), interpolation=cv2.INTER_AREA)
 
     # Convert to float values between 0. and 1.
     res = res.astype(dtype="float64")
     res = res / 255
-    res = np.reshape(res, (1, 28, 28, 1))
+    res = np.reshape(res, (1, size_image, size_image, 1))
 
     with graph.as_default():
         with sess.as_default():
@@ -42,7 +44,7 @@ def test_classify(model, im):
     im = cv2.flip(im, 1)
 
     # Reshape
-    res = cv2.resize(im, (28,28), interpolation=cv2.INTER_AREA)
+    res = cv2.resize(im, (size_image,size_image), interpolation=cv2.INTER_AREA)
 
     # Convert to float values between 0. and 1.
     res = res.astype(dtype="float64")

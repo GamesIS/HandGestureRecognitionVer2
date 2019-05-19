@@ -1,54 +1,467 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MainWindow</class>
- <widget class="QMainWindow" name="MainWindow">
+ <class>HandGestureRecognitionSystem</class>
+ <widget class="QMainWindow" name="HandGestureRecognitionSystem">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>794</width>
     <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Система распознавания жестов руки</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QListWidget" name="listWidget">
-    <property name="geometry">
-     <rect>
-      <x>220</x>
-      <y>80</y>
-      <width>256</width>
-      <height>192</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>280</y>
-      <width>321</width>
-      <height>111</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="startButton">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>300</y>
-      <width>75</width>
-      <height>23</height>
+      <x>100</x>
+      <y>480</y>
+      <width>191</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>Start</string>
+     <string>Включить делати классификации</string>
     </property>
+   </widget>
+   <widget class="QPushButton" name="startDetection">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>120</y>
+      <width>241</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(136, 255, 0);</string>
+    </property>
+    <property name="text">
+     <string>Включить отслеживание</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="startDetection_2">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>340</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Открыть мониторинг</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="startDetection_3">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>400</y>
+      <width>241</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Включить отправку данных на ПО</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="startDetection_4">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>460</y>
+      <width>371</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Включить отправку данных на ПО</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="mode_detection">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>241</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Режим отслеживания</string>
+    </property>
+    <widget class="QRadioButton" name="rb_ip_cam">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>40</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>IP Камера</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QTextEdit" name="address_cam">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>221</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="rb_def_cam">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>111</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Обычная камера</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="settings_detection_gb">
+    <property name="geometry">
+     <rect>
+      <x>250</x>
+      <y>10</y>
+      <width>281</width>
+      <height>301</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Настройки отслеживания</string>
+    </property>
+    <widget class="QLabel" name="cnt_hand_lbl">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>90</y>
+       <width>251</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Максимально отслеживаемое количество рук:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="countHandsCB">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>130</y>
+       <width>251</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QSlider" name="trsh_segm_sldr">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>200</y>
+       <width>221</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="value">
+      <number>27</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="thr_lbl_segm">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>160</y>
+       <width>251</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="text">
+      <string>Порог чувствительности сегментирующей нейронной сети:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="thr_lbl_class">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>230</y>
+       <width>251</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="text">
+      <string>Порог чувствительности классифицирующей нейронной сети:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QSlider" name="trsh_class_sldr">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>270</y>
+       <width>221</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="value">
+      <number>27</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="ver_segm_lbl">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>251</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Версия сегментирующей нейронной сети:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="rb_segm_1">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>251</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>1 (Хуже сегментирует, меньше  ошибок)</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QRadioButton" name="rb_segm_2">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>241</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>2 (Точнее сегментирует, больше ошибок)</string>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="thr_lbl_segm_val">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>190</y>
+       <width>31</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="text">
+      <string>0.27</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="thr_lbl_class_val">
+     <property name="geometry">
+      <rect>
+       <x>240</x>
+       <y>260</y>
+       <width>31</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="text">
+      <string>0.27</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="send_json_group">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>10</y>
+      <width>241</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Передача данных стороннему ПО</string>
+    </property>
+    <widget class="QCheckBox" name="cb_json">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>20</y>
+       <width>121</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Передавать JSON</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QTextEdit" name="ip_host">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>50</y>
+       <width>161</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="html">
+      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;localhost&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QTextEdit" name="port_host">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>100</y>
+       <width>161</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="html">
+      <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;8888&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="ver_segm_lbl_2">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>50</y>
+       <width>61</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>IP Адрес</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="ver_segm_lbl_3">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>100</y>
+       <width>71</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Port</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -56,7 +469,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>794</width>
      <height>21</height>
     </rect>
    </property>

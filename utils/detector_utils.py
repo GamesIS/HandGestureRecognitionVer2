@@ -18,6 +18,7 @@ _score_thresh = 0.27
 MODEL_NAME = 'hand_inference_graph'
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
 PATH_TO_CKPT = MODEL_NAME + '/frozen_inference_graph.pb'
+PATH_TO_CKPT2 = MODEL_NAME + '/frozen_inference_graph2.pb'
 # List of the strings that is used to add correct label for each box.
 PATH_TO_LABELS = os.path.join(MODEL_NAME, 'hand_label_map.pbtxt')
 
@@ -104,13 +105,19 @@ def detect_objects(image_np, detection_graph, sess):
 # Source : Adrian Rosebrock
 # https://www.pyimagesearch.com/2017/02/06/faster-video-file-fps-with-cv2-videocapture-and-opencv/
 class WebcamVideoStream:
+    noSignal = False
+    width = 0
+    height = 0
+    str_connect = ''
+
     def __init__(self, src, width, height):
         # initialize the video camera stream and read the first frame
         # from the stream
-        self.stream = cv2.VideoCapture(src)
-        self.stream.set(cv2.CAP_PROP_FRAME_WIDTH, width)
-        self.stream.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
-        (self.grabbed, self.frame) = self.stream.read()
+        self.str_connect = src
+        self.width = width
+        self.height = height
+        self.try_connect()
+        self.get_frame()
 
         # initialize the variable used to indicate if the thread should
         # be stopped
@@ -121,19 +128,30 @@ class WebcamVideoStream:
         Thread(target=self.update, args=()).start()
         return self
 
+    def get_frame(self):
+        try:
+            (self.grabbed, self.frame) = self.stream.read()
+            self.noSignal = False
+        except Exception:
+            self.frame = cv2.imread("no_signal.jpg")
+            self.noSignal = True
+
+
     def update(self):
         # keep looping infinitely until the thread is stopped
         while True:
             # if the thread indicator variable is set, stop the thread
             if self.stopped:
                 return
-
+            if self.noSignal:
+                self.try_connect()
             # otherwise, read the next frame from the stream
-            (self.grabbed, self.frame) = self.stream.read()
+            self.get_frame()
 
     def read(self):
         # return the frame most recently read
         return self.frame
+
 
     def size(self):
         # return size of the capture device
@@ -142,3 +160,8 @@ class WebcamVideoStream:
     def stop(self):
         # indicate that the thread should be stopped
         self.stopped = True
+
+    def try_connect(self):
+        self.stream = cv2.VideoCapture(self.str_connect)
+        self.stream.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
+        self.stream.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
