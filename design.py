@@ -20,6 +20,12 @@ class Ui_HandGestureRecognitionSystem(object):
         self.startButton.setObjectName("startButton")
         self.startDetection = QtWidgets.QPushButton(self.centralwidget)
         self.startDetection.setGeometry(QtCore.QRect(0, 120, 241, 51))
+        font = QtGui.QFont()
+        font.setPointSize(11)
+        font.setBold(True)
+        font.setWeight(75)
+        self.startDetection.setFont(font)
+        self.startDetection.setStyleSheet("background-color: rgb(136, 255, 0);")
         self.startDetection.setObjectName("startDetection")
         self.startDetection_2 = QtWidgets.QPushButton(self.centralwidget)
         self.startDetection_2.setGeometry(QtCore.QRect(520, 340, 131, 41))
@@ -164,18 +170,18 @@ class Ui_HandGestureRecognitionSystem(object):
         self.rb_segm_2.setText(_translate("HandGestureRecognitionSystem", "2 (Точнее сегментирует, больше ошибок)"))
         self.thr_lbl_segm_val.setText(_translate("HandGestureRecognitionSystem", "0.27"))
         self.thr_lbl_class_val.setText(_translate("HandGestureRecognitionSystem", "0.27"))
-        self.send_json_group.setTitle(_translate("HandGestureRecognitionSystem", "Передача данных стороннему ПО"))
+        self.send_json_group.setTitle(_translate("HandGestureRecognitionSystem", "Передача данных стороннему ПО (utf-8)"))
         self.cb_json.setText(_translate("HandGestureRecognitionSystem", "Передавать JSON"))
         self.ip_host.setHtml(_translate("HandGestureRecognitionSystem", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">localhost</p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">127.0.0.1</p></body></html>"))
         self.port_host.setHtml(_translate("HandGestureRecognitionSystem", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
 "</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">8888</p></body></html>"))
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">9876</p></body></html>"))
         self.ver_segm_lbl_2.setText(_translate("HandGestureRecognitionSystem", "IP Адрес"))
         self.ver_segm_lbl_3.setText(_translate("HandGestureRecognitionSystem", "Port"))
 

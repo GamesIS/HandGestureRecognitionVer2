@@ -6,7 +6,7 @@ from multiprocessing import Queue, Pool
 import cv2
 import tensorflow as tf
 
-from utils import detector_utils as detector_utils
+from utils import detector_utils as detector_utils, json_sender
 from utils import pose_classification_utils as classifier
 from utils.detector_utils import WebcamVideoStream
 
@@ -63,6 +63,7 @@ def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_
             output_q.put(frame)
     sess.close()
 
+
 class Settings:
     threshold = score_thresh
     fpsISEnabled = True
@@ -71,10 +72,12 @@ class Settings:
     def __init__(self):
         pass
 
+
 class HandPose:
     main = None
     recognition_started = False
     settings = Settings()
+
     def __init__(self, mainController):
         self.main = mainController
 
@@ -145,11 +148,10 @@ class HandPose:
         cropped_output_q = Queue(maxsize=args.queue_size)
         inferences_q = Queue(maxsize=args.queue_size)
 
-
         video_capture = WebcamVideoStream(
             src=args.video_source, width=args.width, height=args.height).start()
 
-        #video_capture = WebcamVideoStream(
+        # video_capture = WebcamVideoStream(
         #    'http://192.168.0.84:8080/video', width=args.width, height=args.height).start()
 
         cap_params = {}
@@ -197,7 +199,6 @@ class HandPose:
                 input_q.put(cv2.cvtColor(cv2.imread("no_signal.jpg"), cv2.COLOR_BGR2RGB))
                 video_capture.noSignal = True
 
-
             output_frame = output_q.get()
             cropped_output = cropped_output_q.get()
 
@@ -215,6 +216,12 @@ class HandPose:
             # Display inferences
             if (inferences is not None):
                 gui.drawInferences(inferences, poses)
+                try:
+                    if (self.main.cb_json.isChecked()):
+                        json_sender.send_json(inferences, poses, self.main.ip_host.toPlainText(),
+                                              int(self.main.port_host.toPlainText()))
+                except Exception as e:
+                    print(e)
 
             if (cropped_output is not None):
                 cropped_output = cv2.cvtColor(cropped_output, cv2.COLOR_RGB2BGR)
@@ -263,8 +270,6 @@ class HandPose:
         self.recognition_off()
 
     def recognition_off(self):
-        self.main.start_detection()
-        #self.main.button
-
-if __name__ == '__main__':
-    HandPose.start()
+        if(self.recognition_started != False):
+            self.main.start_detection()
+        # self.main.button

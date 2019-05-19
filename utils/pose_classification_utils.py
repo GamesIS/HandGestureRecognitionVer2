@@ -49,7 +49,7 @@ def test_classify(model, im):
     # Convert to float values between 0. and 1.
     res = res.astype(dtype="float64")
     res = res / 255
-    res = np.reshape(res, (1, 28, 28, 1))
+    res = np.reshape(res, (1, size_image, size_image, 1))
 
     prediction= model.predict(res)
 
