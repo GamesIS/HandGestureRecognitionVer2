@@ -148,11 +148,14 @@ class HandPose:
         cropped_output_q = Queue(maxsize=args.queue_size)
         inferences_q = Queue(maxsize=args.queue_size)
 
-        video_capture = WebcamVideoStream(
-            src=args.video_source, width=args.width, height=args.height).start()
 
-        # video_capture = WebcamVideoStream(
-        #    'http://192.168.0.84:8080/video', width=args.width, height=args.height).start()
+        if self.main.rb_ip_cam.isChecked():
+            video_capture = WebcamVideoStream(
+                'http://192.168.0.84:8080/video', width=args.width, height=args.height).start()
+        else:
+            video_capture = WebcamVideoStream(
+                src=args.video_source, width=args.width, height=args.height).start()
+
 
         cap_params = {}
         frame_processed = 0

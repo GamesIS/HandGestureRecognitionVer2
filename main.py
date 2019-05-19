@@ -48,10 +48,8 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         self.cb_json.clicked.connect(self.set_def_ip_port)
 
         self.ip_host.textChanged.connect(self.value_change_ip)
-        try:
-            self.port_host.textChanged.connect(self.value_change_port)
-        except Exception as e:
-            print(e)
+        self.port_host.textChanged.connect(self.value_change_port)
+        self.address_cam.textChanged.connect(self.value_change_ip_cam)
 
 
         self.countHandsCB.addItems(["1 рука", "2 руки", "10 рук(демо)"])
@@ -90,6 +88,20 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
             self.port_valid = True
             self.port_host.setStyleSheet("")
 
+        if self.validate():
+            self.startDetection.setEnabled(True)
+
+    def value_change_ip_cam(self):
+        pattern = re.compile("^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$")
+        value = pattern.match(self.address_cam.toPlainText())
+        if value == None:
+            self.ip_cam_valid = False
+            self.address_cam.setStyleSheet("border: 2px solid red;")
+            self.startDetection.setEnabled(False)
+            return
+        else:
+            self.ip_cam_valid = True
+            self.address_cam.setStyleSheet("")
         if self.validate():
             self.startDetection.setEnabled(True)
 
@@ -149,6 +161,7 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
 
     def on_clicked_rb(self):
         if self.rb_def_cam.isChecked():
+            self.address_cam.setPlainText(DEFAULT_ADDRESS_CAM)
             self.address_cam.setEnabled(False)
         elif self.rb_ip_cam.isChecked():
             self.address_cam.setEnabled(True)

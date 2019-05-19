@@ -119,7 +119,7 @@ class Ui_HandGestureRecognitionSystem(object):
         self.send_json_group.setGeometry(QtCore.QRect(540, 10, 241, 141))
         self.send_json_group.setObjectName("send_json_group")
         self.cb_json = QtWidgets.QCheckBox(self.send_json_group)
-        self.cb_json.setGeometry(QtCore.QRect(10, 20, 121, 17))
+        self.cb_json.setGeometry(QtCore.QRect(10, 20, 161, 17))
         self.cb_json.setChecked(True)
         self.cb_json.setObjectName("cb_json")
         self.ip_host = QtWidgets.QTextEdit(self.send_json_group)
@@ -160,6 +160,11 @@ class Ui_HandGestureRecognitionSystem(object):
         self.startDetection_4.setText(_translate("HandGestureRecognitionSystem", "Включить отправку данных на ПО"))
         self.mode_detection.setTitle(_translate("HandGestureRecognitionSystem", "Режим отслеживания"))
         self.rb_ip_cam.setText(_translate("HandGestureRecognitionSystem", "IP Камера"))
+        self.address_cam.setHtml(_translate("HandGestureRecognitionSystem", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"</style></head><body style=\" font-family:\'MS Shell Dlg 2\'; font-size:8.25pt; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">http://192.168.0.84:8080/video</p></body></html>"))
         self.rb_def_cam.setText(_translate("HandGestureRecognitionSystem", "Обычная камера"))
         self.settings_detection_gb.setTitle(_translate("HandGestureRecognitionSystem", "Настройки отслеживания"))
         self.cnt_hand_lbl.setText(_translate("HandGestureRecognitionSystem", "Максимально отслеживаемое количество рук:"))
@@ -170,8 +175,8 @@ class Ui_HandGestureRecognitionSystem(object):
         self.rb_segm_2.setText(_translate("HandGestureRecognitionSystem", "2 (Точнее сегментирует, больше ошибок)"))
         self.thr_lbl_segm_val.setText(_translate("HandGestureRecognitionSystem", "0.27"))
         self.thr_lbl_class_val.setText(_translate("HandGestureRecognitionSystem", "0.27"))
-        self.send_json_group.setTitle(_translate("HandGestureRecognitionSystem", "Передача данных стороннему ПО (utf-8)"))
-        self.cb_json.setText(_translate("HandGestureRecognitionSystem", "Передавать JSON"))
+        self.send_json_group.setTitle(_translate("HandGestureRecognitionSystem", "Передача данных стороннему ПО (UDP)"))
+        self.cb_json.setText(_translate("HandGestureRecognitionSystem", "Передавать JSON (UTF-8)"))
         self.ip_host.setHtml(_translate("HandGestureRecognitionSystem", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
 "p, li { white-space: pre-wrap; }\n"
