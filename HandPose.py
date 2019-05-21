@@ -1,6 +1,7 @@
 import argparse
 import datetime
 import os;
+import time
 from multiprocessing import Queue, Pool
 
 import cv2
@@ -20,9 +21,9 @@ window_name = 'Camera'
 
 # Create a worker thread that loads graph and
 # does detection on images in an input queue and puts it on an output queue
-def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_processed, thresh_q):
+def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_processed, settings_q, version_segm_cnn):
     print(">> loading frozen model for worker")
-    detection_graph, sess = detector_utils.load_inference_graph()
+    detection_graph, sess = detector_utils.load_inference_graph(version_segm_cnn)
     sess = tf.Session(graph=detection_graph)
 
     print(">> loading keras model for worker")
@@ -38,16 +39,17 @@ def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_
             # Actual detection. Variable boxes contains the bounding box cordinates for hands detected,
             # while scores contains the confidence for each of these boxes.
             # Hint: If len(boxes) > 1 , you may assume you have found atleast one hand (within your score threshold)
-            thresh = thresh_q.get().threshold
+            settings = settings_q.get()
+            thresh = settings.threshold
             boxes, scores = detector_utils.detect_objects(
                 frame, detection_graph, sess)
 
             # get region of interest
-            res = detector_utils.get_box_image(cap_params['num_hands_detect'], thresh,
+            res = detector_utils.get_box_image(settings.countHands, thresh,
                                                scores, boxes, cap_params['im_width'], cap_params['im_height'], frame)
 
             # draw bounding boxes
-            detector_utils.draw_box_on_image(cap_params['num_hands_detect'], thresh,
+            detector_utils.draw_box_on_image(settings.countHands, thresh,
                                              scores, boxes, cap_params['im_width'], cap_params['im_height'], frame)
 
             # classify hand pose
@@ -77,6 +79,7 @@ class HandPose:
     main = None
     recognition_started = False
     settings = Settings()
+    version_segm_cnn = ""
 
     def __init__(self, mainController):
         self.main = mainController
@@ -92,32 +95,18 @@ class HandPose:
             default=0,
             help='Device index of the camera.')
         parser.add_argument(
-            '-nhands',
-            '--num_hands',
-            dest='num_hands',
-            type=int,
-            default=1,
-            help='Max number of hands to detect.')
-        parser.add_argument(
-            '-fps',
-            '--fps',
-            dest='fps',
-            type=int,
-            default=1,
-            help='Show FPS on detection/display visualization')
-        parser.add_argument(
             '-wd',
             '--width',
             dest='width',
             type=int,
-            default=640,
+            default=300,
             help='Width of the frames in the video stream.')
         parser.add_argument(
             '-ht',
             '--height',
             dest='height',
             type=int,
-            default=480,
+            default=200,
             help='Height of the frames in the video stream.')
         parser.add_argument(
             '-ds',
@@ -126,13 +115,6 @@ class HandPose:
             type=int,
             default=1,
             help='Display the detected images using OpenCV. This reduces FPS')
-        parser.add_argument(
-            '-num-w',
-            '--num-workers',
-            dest='num_workers',
-            type=int,
-            default=4,
-            help='Number of workers.')
         parser.add_argument(
             '-q-size',
             '--queue-size',
@@ -144,7 +126,7 @@ class HandPose:
 
         input_q = Queue(maxsize=args.queue_size)
         output_q = Queue(maxsize=args.queue_size)
-        input_thresh = Queue(maxsize=args.queue_size)
+        settings_q = Queue(maxsize=args.queue_size)
         cropped_output_q = Queue(maxsize=args.queue_size)
         inferences_q = Queue(maxsize=args.queue_size)
 
@@ -163,9 +145,6 @@ class HandPose:
         print(cap_params['im_width'], cap_params['im_height'])
         cap_params['score_thresh'] = score_thresh
 
-        # max number of hands we want to detect/track
-        cap_params['num_hands_detect'] = args.num_hands
-
         print(cap_params, args)
 
         # Count number of files to increment new example directory
@@ -178,11 +157,13 @@ class HandPose:
                 print(line)
                 poses.append(line)
 
+        num_workers = 1 # TODO 4
         # spin up workers to paralleize detection.
-        pool = Pool(args.num_workers, worker,
-                    (input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_processed, input_thresh))
+        pool = Pool(num_workers, worker,
+                    (input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_processed, settings_q, self.version_segm_cnn))
 
-        start_time = datetime.datetime.now()
+        #start_time = datetime.datetime.now()
+        start_time_millis = int(round(time.time() * 1000))
         num_frames = 0
         fps = 0
         index = 0
@@ -190,7 +171,9 @@ class HandPose:
         cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
 
         while cv2.getWindowProperty(window_name, 0) >= 0 and self.recognition_started:
-            input_thresh.put(self.settings)
+            if self.settings.fpsISEnabled:
+                start_time_millis = int(round(time.time() * 1000))
+            settings_q.put(self.settings)
 
             frame = video_capture.read()
             frame = cv2.flip(frame, 1)
@@ -212,9 +195,12 @@ class HandPose:
             except Exception as e:
                 pass
 
-            elapsed_time = (datetime.datetime.now() - start_time).total_seconds()
-            num_frames += 1
-            fps = num_frames / elapsed_time
+            #elapsed_time = (datetime.datetime.now() - start_time).total_seconds()
+            #num_frames += 1
+            #fps = num_frames / elapsed_time
+
+            if self.settings.fpsISEnabled:
+                fps = int(1000 / (int(round(time.time() * 1000)) - start_time_millis))
 
             # Display inferences
             if (inferences is not None):
@@ -235,38 +221,35 @@ class HandPose:
                     # cv2.imwrite('image_' + str(num_frames) + '.png', cropped_output)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         break
-                else:
-                    if (num_frames == 400):
-                        num_frames = 0
-                        start_time = datetime.datetime.now()
-                    else:
-                        print("frames processed: ", index, "elapsed time: ",
-                              elapsed_time, "fps: ", str(int(fps)))
+                # else:
+                #     if (num_frames == 400):
+                #         num_frames = 0
+                #         start_time = datetime.datetime.now()
+                #     else:
+                #         print("frames processed: ", index, "elapsed time: ",
+                #               elapsed_time, "fps: ", str(int(fps)))
 
             # print("frame ",  index, num_frames, elapsed_time, fps)
 
             if (output_frame is not None):
                 output_frame = cv2.cvtColor(output_frame, cv2.COLOR_RGB2BGR)
                 if (args.display > 0):
-                    if (args.fps > 0):
+                    if self.settings.fpsISEnabled:
                         detector_utils.draw_fps_on_image("FPS : " + str(int(fps)),
                                                          output_frame)
                     cv2.imshow(window_name, output_frame)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         break
-                else:
-                    if (num_frames == 400):
-                        num_frames = 0
-                        start_time = datetime.datetime.now()
-                    else:
-                        print("frames processed: ", index, "elapsed time: ",
-                              elapsed_time, "fps: ", str(int(fps)))
+                # else:
+                #     if (num_frames == 400):
+                #         num_frames = 0
+                #         start_time = datetime.datetime.now()
+                #     else:
+                #         print("frames processed: ", index, "elapsed time: ",
+                #               elapsed_time, "fps: ", str(int(fps)))
             else:
                 print("video end")
                 break
-        elapsed_time = (datetime.datetime.now() - start_time).total_seconds()
-        fps = num_frames / elapsed_time
-        print("fps", fps)
         pool.terminate()
         video_capture.stop()
         cv2.destroyAllWindows()

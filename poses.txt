@@ -1,7 +1,7 @@
-Call
-Dang
-Fist
-Garbage
-Palm
-Three
-Two_Horiz
+Вызов
+Кулак(Победа)
+Кулак(Угроза)
+Мусор
+Ладонь
+Три
+Два (Гориз)

@@ -17,8 +17,8 @@ _score_thresh = 0.27
 
 MODEL_NAME = 'hand_inference_graph'
 # Path to frozen detection graph. This is the actual model that is used for the object detection.
-PATH_TO_CKPT = MODEL_NAME + '/frozen_inference_graph.pb'
-PATH_TO_CKPT2 = MODEL_NAME + '/frozen_inference_graph2.pb'
+#PATH_TO_CKPT = MODEL_NAME + '/frozen_inference_graph.pb'
+#PATH_TO_CKPT2 = MODEL_NAME + '/frozen_inference_graph2.pb'
 # List of the strings that is used to add correct label for each box.
 PATH_TO_LABELS = os.path.join(MODEL_NAME, 'hand_label_map.pbtxt')
 
@@ -31,13 +31,13 @@ category_index = label_map_util.create_category_index(categories)
 
 
 # Load a frozen infrerence graph into memory
-def load_inference_graph():
+def load_inference_graph(nameGraph):
     # load frozen tensorflow model into memory
     print("> ====== loading HAND frozen graph into memory")
     detection_graph = tf.Graph()
     with detection_graph.as_default():
         od_graph_def = tf.GraphDef()
-        with tf.gfile.GFile(PATH_TO_CKPT, 'rb') as fid:
+        with tf.gfile.GFile(MODEL_NAME + nameGraph, 'rb') as fid:
             serialized_graph = fid.read()
             od_graph_def.ParseFromString(serialized_graph)
             tf.import_graph_def(od_graph_def, name='')

@@ -19,6 +19,9 @@ DEFAULT_IP = '127.0.0.1'
 DEFAULT_PORT = '9876'
 DEFAULT_ADDRESS_CAM = 'http://192.168.0.84:8080/video'
 
+SEGM_CNN_VERSION_1 = '/frozen_inference_graph.pb'
+SEGM_CNN_VERSION_2 = '/frozen_inference_graph2.pb'
+
 class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSystem):
     recognition = None
 
@@ -34,6 +37,8 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         self.startButton.clicked.connect(self.start_hand_pose)
         self.recognition = rec_class.HandPose(mainController=self)
         self.recognition.settings.threshold = float(self.trsh_segm_sldr.value() / 100)
+        self.recognition.settings.threshold = float(self.trsh_segm_sldr.value() / 100)
+        self.recognition.version_segm_cnn = SEGM_CNN_VERSION_1
 
         self.startDetection.clicked.connect(self.start_detection)
         self.setWindowIcon(QtGui.QIcon('icon.png'))
@@ -51,8 +56,25 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         self.port_host.textChanged.connect(self.value_change_port)
         self.address_cam.textChanged.connect(self.value_change_ip_cam)
 
+        self.rb_segm_1.clicked.connect(self.change_segm_cnn)
+        self.rb_segm_2.clicked.connect(self.change_segm_cnn)
 
         self.countHandsCB.addItems(["1 рука", "2 руки", "10 рук(демо)"])
+        self.countHandsCB.activated.connect(self.count_hands_changed)
+
+    def count_hands_changed(self):
+        if self.countHandsCB.currentIndex() == 0:
+            self.recognition.settings.countHands = 1
+        elif self.countHandsCB.currentIndex() == 1:
+            self.recognition.settings.countHands = 2
+        elif self.countHandsCB.currentIndex() == 2:
+            self.recognition.settings.countHands = 10
+
+    def change_segm_cnn(self):
+        if self.rb_segm_1.isChecked():
+            self.recognition.version_segm_cnn = SEGM_CNN_VERSION_1
+        else:
+            self.recognition.version_segm_cnn = SEGM_CNN_VERSION_2
 
     def set_def_ip_port(self):
         if self.recognition.recognition_started == False:

@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="startButton">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>480</y>
+      <x>410</x>
+      <y>520</y>
       <width>191</width>
       <height>31</height>
      </rect>
@@ -53,40 +53,14 @@
    <widget class="QPushButton" name="startDetection_2">
     <property name="geometry">
      <rect>
-      <x>520</x>
-      <y>340</y>
+      <x>220</x>
+      <y>410</y>
       <width>131</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
      <string>Открыть мониторинг</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="startDetection_3">
-    <property name="geometry">
-     <rect>
-      <x>410</x>
-      <y>400</y>
-      <width>241</width>
-      <height>51</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Включить отправку данных на ПО</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="startDetection_4">
-    <property name="geometry">
-     <rect>
-      <x>350</x>
-      <y>460</y>
-      <width>371</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Включить отправку данных на ПО</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="mode_detection">
@@ -469,6 +443,119 @@ p, li { white-space: pre-wrap; }
       <bool>true</bool>
      </property>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="startDetection_5">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>160</y>
+      <width>241</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Сбросить все настройки</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="startDetection_6">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>330</y>
+      <width>621</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>16</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Редактирование классифицирующей NN (ГРУППЫ ЖЕСТОВ)</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="cb_json_2">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>530</y>
+      <width>161</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Показывать счетчик FPS</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="countHandsCB_2">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>520</y>
+      <width>251</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="thr_lbl_segm_2">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>480</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="lineWidth">
+     <number>1</number>
+    </property>
+    <property name="text">
+     <string>Выбор доступной камеры</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="startDetection_3">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>370</y>
+      <width>501</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>РЕЗУЛЬТАТЫ КЛАССИФИКАЦИИ НА ИТОГОВОМ ИЗОБРАЖЕНИИ В РАЗНЫХ ЦВЕТАХ</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="thr_lbl_segm_3">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>200</y>
+      <width>281</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="lineWidth">
+     <number>1</number>
+    </property>
+    <property name="text">
+     <string>ТОЛЬКО ПРИ ПРЕВЫШЕНИИ БУДЕТ ОТПРАВЛЯТЬСЯ JSON и ОТОБРАЖАТЬСЯ КАК РАСПОЗНАННЫЙ ЖЕСТ</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
