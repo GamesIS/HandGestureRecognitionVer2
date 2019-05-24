@@ -1,94 +1,41 @@
 import os
+import threading
 
 import cv2
+import numpy as np
 import tensorflow as tf
+import normalize as nm
+from PIL import ImageFont, ImageDraw, Image
 
 from utils import detector_utils as detector_utils
 
 
-def main():
+def main(gestureName, version_cnn):
+    name_pose = gestureName
     currentPath = ''
     currentExample = ''
 
-    print('Do you want to : \n 1 - Add new pose \
-                            \n 2 - Add examples to existing pose \
-                            \n 3 - Add garbage examples')
+    # Count number of files to increment new example directory
+    if not os.path.exists('Poses/' + gestureName + '/'):
+        os.makedirs('Poses/' + gestureName + '/')
+    subdirs = os.listdir('Poses/' + gestureName + '/')
+    index = len(subdirs) + 1
 
-    menu_choice = input()
-    while (menu_choice != '1' and menu_choice != '2' and menu_choice != '3'):
-        print('Please enter 1 or 2')
-        menu_choice = input()
+    # Create new example directory
+    if not os.path.exists('Poses/' + gestureName + '/' + gestureName + '_' + str(index) + '/'):
+        os.makedirs('Poses/' + gestureName + '/' + gestureName + '_' + str(index) + '/')
 
-    if (menu_choice == '1'):
-        print('Enter a name for the pose you want to add :')
-        name_pose = input()
-
-        # Create folder for pose 
-        if not os.path.exists('Poses/' + name_pose):
-            os.makedirs('Poses/' + name_pose + '/' + name_pose + '_1/')
-            currentPath = 'Poses/' + name_pose + '/' + name_pose + '_1/'
-            currentExample = name_pose + '_1_'
-
-    elif (menu_choice == '2'):
-        # Display current poses
-        dirs = os.listdir('Poses/')
-        dirs_choice = ''
-        possible_choices = []
-        i = 1
-        for _dir in dirs:
-            dirs_choice += str(i) + ' - ' + str(_dir) + ' / '
-            possible_choices.append(str(i))
-            i += 1
-
-        # Ask user to choose to which pose to add examples
-        print('Choose one of the following pose:')
-        print(dirs_choice)
-        choice = input()
-        while (not choice in possible_choices and dirs[int(choice) - 1] == 'garbage'):
-            print('Please enter one of the following (not garbage): ' + str(possible_choices))
-            choice = input()
-
-        # Count number of files to increment new example directory
-        subdirs = os.listdir('Poses/' + dirs[int(choice) - 1] + '/')
-        index = len(subdirs) + 1
-
-        # Create new example directory
-        if not os.path.exists('Poses/' + dirs[int(choice) - 1] + '/' + dirs[int(choice) - 1] + '_' + str(index) + '/'):
-            os.makedirs('Poses/' + dirs[int(choice) - 1] + '/' + dirs[int(choice) - 1] + '_' + str(index) + '/')
-
-            # Update current path
-            currentPath = 'Poses/' + dirs[int(choice) - 1] + '/' + dirs[int(choice) - 1] + '_' + str(index) + '/'
-            currentExample = dirs[int(choice) - 1] + '_' + str(index) + '_'
-            name_pose = dirs[int(choice) - 1]
-
-    elif (menu_choice == '3'):
-        # Create folder for pose 
-        if not os.path.exists('Poses/Garbage/'):
-            os.makedirs('Poses/Garbage/Garbage_1/')
-            currentPath = 'Poses/Garbage/Garbage_1/'
-            currentExample = 'Garbage_1_'
-            name_pose = 'Garbage'
-        else:
-            # Count number of files to increment new example directory
-            subdirs = os.listdir('Poses/Garbage/')
-            index = len(subdirs) + 1
-            # Create new example directory
-            if not os.path.exists('Poses/Garbage/Garbage_' + str(index) + '/'):
-                os.makedirs('Poses/Garbage/Garbage_' + str(index) + '/')
-
-                # Update current path
-                currentPath = 'Poses/Garbage/Garbage_' + str(index) + '/'
-                currentExample = 'Garbage_' + str(index) + '_'
-                name_pose = 'Garbage'
+        # Update current path
+        currentPath = 'Poses/' + gestureName + '/' + gestureName + '_' + str(index) + '/'
+        currentExample = gestureName + '_' + str(index) + '_'
 
     print('You\'ll now be prompted to record the pose you want to add. \n \
                 Please place your hand beforehand facing the camera, and press any key when ready. \n \
                 When finished press \'q\'.')
-    input()
-
     # Begin capturing
-    #cap = cv2.VideoCapture(0)
-    cap = cv2.VideoCapture('http://192.168.0.84:8080/video')
+    cap = cv2.VideoCapture(0)
+    #cap = cv2.VideoCapture('http://192.168.0.84:8080/video')
+
 
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
@@ -102,6 +49,16 @@ def main():
             # write the frame
             out.write(frame)
 
+            b, g, r, a = 0, 0, 255, 0
+            ## Use simsum.ttc to write Chinese.
+            fontpath = "simsun.ttf"
+            font = ImageFont.truetype(fontpath, 32)
+            img_pil = Image.fromarray(frame)
+            draw = ImageDraw.Draw(img_pil)
+            draw.text((10, 10), "Нажмите Q чтобы завершить процесс", font=font, fill=(b, g, r, a))
+            frame = np.array(img_pil)
+
+            #TODO НАЖМИТЕ Q чтобы завершить процесс
             cv2.imshow('frame', frame)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
@@ -113,6 +70,10 @@ def main():
     out.release()
     cv2.destroyAllWindows()
 
+    thread1 = threading.Thread(target=start_create_imgs, args=(currentPath, name_pose, currentExample, gestureName, index, version_cnn))
+    thread1.start()
+
+def start_create_imgs(currentPath, name_pose, currentExample, gestureName, index, version_cnn):
     vid = cv2.VideoCapture(currentPath + name_pose + '.avi')
 
     # Check if the video
@@ -121,7 +82,7 @@ def main():
         return
 
     print('>> loading frozen model..')
-    detection_graph, sess = detector_utils.load_inference_graph()
+    detection_graph, sess = detector_utils.load_inference_graph(version_cnn)
     sess = tf.Session(graph=detection_graph)
     print('>> model loaded!')
 
@@ -155,6 +116,7 @@ def main():
     print('   Processed ' + str(_iter) + ' frames!')
 
     vid.release()
+    nm.normalize(gestureName, index)
 
 
 if __name__ == '__main__':

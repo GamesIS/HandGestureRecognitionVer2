@@ -35,7 +35,7 @@ def drawInferences(values, names):
 
         b, g, r, a = 0, 255, 0, 0
         ## Use simsum.ttc to write Chinese.
-        fontpath = "simsun.ttf"  # <== 这里是宋体路径
+        fontpath = "simsun.ttf"
         font = ImageFont.truetype(fontpath, 32)
         img_pil = Image.fromarray(blank)
         draw = ImageDraw.Draw(img_pil)

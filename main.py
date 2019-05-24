@@ -7,10 +7,12 @@ from multiprocessing import Queue
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
+import AddPose
 import HandPose as rec_class
 import design  # Это наш конвертированный файл дизайна
 import gestures
 import gui
+import class_cnn
 from utils import db_utils as db_utils
 
 # Установка значка приложения в taskBar
@@ -69,6 +71,9 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
 
         self.gestures_win = None
         self.open_list_gestures.clicked.connect(self.open_gestures_win)
+
+        self.class_cnn_win = None
+        self.sett_class_cnn.clicked.connect(self.open_class_cnn_win)
 
     def count_hands_changed(self):
         if self.countHandsCB.currentIndex() == 0:
@@ -209,6 +214,19 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
             self.gestures_win.show()
             self.gestures_win.init_table()
 
+    def open_class_cnn_win(self):
+        try:
+
+            if not self.class_cnn_win:
+                self.class_cnn_win = ClassCNN(self)
+            if self.class_cnn_win.isVisible():
+                self.class_cnn_win.hide()
+            else:
+                self.class_cnn_win.show()
+                self.class_cnn_win.update_gestures_cb()
+        except Exception as e:
+            print(e)
+
 
 class GesturesWin(QtWidgets.QMainWindow):
     main = None
@@ -229,7 +247,7 @@ class GesturesWin(QtWidgets.QMainWindow):
         self.ui.add_gesture.setEnabled(False)
         row_count = self.ui.gesture_table.rowCount() + 1
         self.ui.gesture_table.setRowCount(row_count)
-        one_cellinfo = QTableWidgetItem("")
+        one_cellinfo = QTableWidgetItem("Жест")
         two_cellinfo = QTableWidgetItem("")
         self.ui.gesture_table.setItem(row_count - 1, 0, one_cellinfo)
         self.ui.gesture_table.setItem(row_count - 1, 1, two_cellinfo)
@@ -269,15 +287,24 @@ class GesturesWin(QtWidgets.QMainWindow):
                 if grp not in poses.group:
                     group.append(grp)
                 gestures_group.append(group.index(grp))
+            minIndex = len(poses.gestures)
+            if minIndex > len(gestures):
+                minIndex = len(gestures)
+            minIndex = minIndex - 1
+            index = 0
+            for oldGesture in poses.gestures:
+                if index > minIndex:
+                    break
+                if gestures[index] != oldGesture:
+                    rename_folders(oldGesture, gestures[index])
+                index = index + 1
             poses.gestures = gestures
+            check_folders(poses.gestures)
             poses.group = group
             poses.gestures_group = gestures_group
             db_utils.save_json_poses(poses)
         except Exception as e:
             print(e)
-
-    def rename_folders(self):
-        pass
 
     def validate_table(self):
         try:
@@ -291,6 +318,8 @@ class GesturesWin(QtWidgets.QMainWindow):
                     self.ui.add_gesture.setEnabled(False)
                     show_error("Название жеста должно быть уникальным.", "Предупреждение")
                     return
+                if self.ui.gesture_table.item(row, 0).text() == "":
+                    show_error("Названи жеста не может быть пустым", "Предупреждение")
 
             self.ui.save_gesture.setEnabled(True)
             self.ui.add_gesture.setEnabled(True)
@@ -303,7 +332,47 @@ class GesturesWin(QtWidgets.QMainWindow):
             gestures.append(self.ui.gesture_table.item(row, 0).text())
         return gestures
 
+class ClassCNN(QtWidgets.QMainWindow):
+    main = None
 
+    def __init__(self, parent):
+        QtWidgets.QMainWindow.__init__(self, parent)
+        self.main = parent
+        self.ui = class_cnn.Ui_class_cnn_form()
+        self.ui.setupUi(self)
+        self.update_gestures_cb()
+        self.ui.add_pose.clicked.connect(self.add_pose)
+
+    def add_pose(self):
+        AddPose.main(self.ui.gestures_cb.currentText(), self.main.recognition.version_segm_cnn)
+
+    def update_gestures_cb(self):
+        self.ui.gestures_cb.clear()
+        self.ui.gestures_cb.addItems(self.main.Gestures.gestures)
+
+def check_folders(gestures):
+    all_gestures = os.listdir('Poses/')
+    tmpList = []
+    for gest in all_gestures:
+        if gest not in gestures:
+            tmpList.append(gest)
+
+    for gest in tmpList:
+        oldPath = 'Poses/' + gest
+        newPath = 'TODELETE/' + gest
+        if os.path.exists(oldPath):
+            print(newPath)
+
+def rename_folders(oldName, newName):
+    index = 1
+    oldPath = 'Poses/' + oldName + '/'
+    if os.path.exists(oldPath):
+        subdirs = os.listdir(oldPath)
+        for sub in subdirs:
+            print(sub)
+            os.rename(oldPath + sub, oldPath + newName + "_" + str(index))
+            index = index+1
+        os.rename(oldPath, 'Poses/' + newName + '/')
 
 def show_error(message, title):
     msg = QMessageBox()

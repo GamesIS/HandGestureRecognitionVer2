@@ -457,12 +457,12 @@ p, li { white-space: pre-wrap; }
      <string>Сбросить все настройки</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="startDetection_6">
+   <widget class="QPushButton" name="sett_class_cnn">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>330</y>
-      <width>621</width>
+      <x>10</x>
+      <y>320</y>
+      <width>441</width>
       <height>41</height>
      </rect>
     </property>
@@ -472,7 +472,7 @@ p, li { white-space: pre-wrap; }
      </font>
     </property>
     <property name="text">
-     <string>Редактирование классифицирующей NN (ГРУППЫ ЖЕСТОВ)</string>
+     <string>Редактирование классифицирующей NN</string>
     </property>
    </widget>
    <widget class="QCheckBox" name="cb_json_2">
@@ -584,8 +584,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="open_list_gestures">
     <property name="geometry">
      <rect>
-      <x>460</x>
-      <y>440</y>
+      <x>630</x>
+      <y>330</y>
       <width>151</width>
       <height>41</height>
      </rect>
@@ -621,6 +621,19 @@ p, li { white-space: pre-wrap; }
       <string>Page</string>
      </attribute>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="startDetection_4">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>440</y>
+      <width>131</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Открыть мониторинг</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
