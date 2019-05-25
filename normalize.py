@@ -1,11 +1,9 @@
 import os
 
 import cv2
-import cyrtranslit
 
 
 def normalize(gesture, index):
-    #gesture = cyrtranslit.to_latin(gesture, 'ru')
     print(os.listdir("Poses/"))
 
     poses = os.listdir('Poses/')

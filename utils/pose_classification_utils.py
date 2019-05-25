@@ -54,37 +54,3 @@ def test_classify(model, im):
     prediction= model.predict(res)
 
     return prediction[0]
-
-if __name__ == "__main__":
-    import keras
-
-    print(">> loading keras model for pose classification")
-    try:
-        model = keras.models.load_model("cnn/models/hand_poses_win_wGarbage_10.h5")
-    except Exception as e:
-        print(e)
-
-    # Fist
-    print('<< FIST >>')
-    im = cv2.imread("Poses/Fist/Fist_1/Fist_1_1302.png")
-    print(test_classify(model, im))
-
-    # Dang
-    print('<< DANG >>')
-    im = cv2.imread("Poses/Dang/Dang_1/Dang_1_1223.png")
-    print(test_classify(model, im))
-
-    # Four
-    print('<< FOUR >>')
-    im = cv2.imread("Poses/Four/Four_1/Four_1_867.png")
-    print(test_classify(model, im))
-    
-    # Startrek
-    print('<< Startrek >>')
-    im = cv2.imread("Poses/Startrek/Startrek_1/Startrek_1_867.png")
-    print(test_classify(model, im))
-
-    # Palm
-    print('<< Palm >>')
-    im = cv2.imread("Poses/Palm/Palm_1/Palm_1_867.png")
-    print(test_classify(model, im))

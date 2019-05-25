@@ -4,7 +4,8 @@ import re
 import sys  # sys нужен для передачи argv в QApplication
 from multiprocessing import Queue
 
-from PyQt5 import QtWidgets, QtGui
+import cyrtranslit
+from PyQt5 import QtWidgets, QtGui, QtCore
 from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
 import AddPose
@@ -295,7 +296,7 @@ class GesturesWin(QtWidgets.QMainWindow):
                     rename_folders(oldGesture, gestures[index])
                 index = index + 1
             poses.gestures = gestures
-            check_folders(poses.gestures)
+            #check_folders(poses.gestures)
             poses.group = group
             poses.gestures_group = gestures_group
             db_utils.save_json_poses(poses)
@@ -351,6 +352,8 @@ class ClassCNN(QtWidgets.QMainWindow):
         for item in poses.gestures:
             one_cellinfo = QTableWidgetItem(item)
             two_cellinfo = QTableWidgetItem(str(get_count_examples(item)))
+            one_cellinfo.setFlags(QtCore.Qt.ItemIsEnabled)
+            two_cellinfo.setFlags(QtCore.Qt.ItemIsEnabled)
 
             # combo = QtWidgets.QComboBox()
             # combo.addItem("Изучить")
@@ -368,20 +371,21 @@ class ClassCNN(QtWidgets.QMainWindow):
         self.init_table()
         self.ui.gestures_cb.addItems(self.main.Gestures.gestures)
 
-def check_folders(gestures):
-    all_gestures = os.listdir('Poses/')
-    tmpList = []
-    for gest in all_gestures:
-        if gest not in gestures:
-            tmpList.append(gest)
-
-    for gest in tmpList:
-        oldPath = 'Poses/' + gest
-        newPath = 'TODELETE/' + gest
-        if os.path.exists(oldPath):
-            print(newPath)
+# def check_folders(gestures):
+#     all_gestures = os.listdir('Poses/')
+#     tmpList = []
+#     for gest in all_gestures:
+#         if gest not in gestures:
+#             tmpList.append(gest)
+#
+#     for gest in tmpList:
+#         oldPath = 'Poses/' + gest
+#         newPath = 'TODELETE/' + gest
+#         if os.path.exists(oldPath):
+#             print(newPath)
 
 def get_count_examples(pose):
+    pose = cyrtranslit.to_latin(pose, 'ru')
     poses = os.listdir('Poses/')
     count = 0
     try:
@@ -394,6 +398,8 @@ def get_count_examples(pose):
     return count
 
 def rename_folders(oldName, newName):
+    oldName = cyrtranslit.to_latin(oldName, 'ru')
+    newName = cyrtranslit.to_latin(newName, 'ru')
     index = 1
     oldPath = 'Poses/' + oldName + '/'
     if os.path.exists(oldPath):
