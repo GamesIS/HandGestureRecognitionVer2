@@ -17,15 +17,15 @@ def load_poses_names(path_file):
 
 
 def load_json_poses():
-    with open(POSES_JSON, 'r') as readFile:
+    with open(POSES_JSON, 'r', encoding='utf-8') as readFile:
         json_poses = json.load(readFile)
         poses = Poses(json_poses['gestures'], json_poses['group'], json_poses['gestures_group'])
         return poses
 
-
 def save_json_poses(object):
-    with open(POSES_JSON, 'w') as outfile:
-        json.dump(object.__dict__, outfile)
+    with open(POSES_JSON, 'w', encoding='utf-8') as json_file:
+        data = json.dumps(object.__dict__, ensure_ascii=False)
+        json_file.write(data)
 
 
 class Poses:

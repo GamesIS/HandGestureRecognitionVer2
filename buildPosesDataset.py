@@ -8,7 +8,7 @@ from sklearn.utils import shuffle
 def read_data(req_poses):
     count_im = 0
     count_classes = 0
-    posesPath = '../Poses/'
+    posesPath = 'Poses/'
     poses = os.listdir(posesPath)
     if (req_poses[0] == 'all'):
         req_poses = poses.copy()

@@ -2,7 +2,6 @@ import os
 
 import cv2
 
-
 def normalize(gesture, index):
     print(os.listdir("Poses/"))
 

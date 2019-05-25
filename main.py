@@ -14,6 +14,7 @@ import design  # Это наш конвертированный файл диз�
 import gestures
 import gui
 import class_cnn
+from cnn import cnn
 from utils import db_utils as db_utils
 
 # Установка значка приложения в taskBar
@@ -339,6 +340,10 @@ class ClassCNN(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.update_gestures_cb()
         self.ui.add_pose.clicked.connect(self.add_pose)
+        self.ui.start_training.clicked.connect(self.start_training_cnn)
+    
+    def start_training_cnn(self):
+        cnn.train(int(self.ui.count_epoch.toPlainText()))
 
     def add_pose(self):
         AddPose.main(self.ui.gestures_cb.currentText(), self.main.recognition.version_segm_cnn)

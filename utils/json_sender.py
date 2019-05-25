@@ -13,7 +13,7 @@ def send_json(prediction, names, ip, port):
 
 def conv_to_json(prediction, names):
     predict = Prediction(prediction, names)
-    json_message = json.dumps(predict.__dict__)
+    json_message = json.dumps(predict.__dict__, ensure_ascii=False)
     return json_message
 
 class Prediction(object):

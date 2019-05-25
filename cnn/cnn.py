@@ -13,11 +13,10 @@ sys.path.insert(1, os.path.join(sys.path[0], '..'))
 import buildPosesDataset as dataset
 
 
-def train():
+def train(epochs):
     batch_size = 128
-    epochs = 3
     learning_rate = 0.01
-    model_name = "models/hand_poses_wGarbage_" + str(epochs) + ".h5"
+    model_name = "cnn/models/hand_poses_wGarbage_" + str(epochs) + ".h5"
 
     # input image dimensions
     img_rows, img_cols = 28, 28
@@ -106,7 +105,3 @@ def train():
 
     plt.tight_layout()
     plt.show()
-
-
-if __name__ == "__main__":
-    train()
