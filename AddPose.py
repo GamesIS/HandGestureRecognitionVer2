@@ -5,12 +5,14 @@ import cv2
 import numpy as np
 import tensorflow as tf
 import normalize as nm
+import cyrtranslit
 from PIL import ImageFont, ImageDraw, Image
 
 from utils import detector_utils as detector_utils
 
 
 def main(gestureName, version_cnn):
+    gestureName = cyrtranslit.to_latin(gestureName, 'ru')
     name_pose = gestureName
     currentPath = ''
     currentExample = ''
@@ -27,7 +29,7 @@ def main(gestureName, version_cnn):
 
         # Update current path
         currentPath = 'Poses/' + gestureName + '/' + gestureName + '_' + str(index) + '/'
-        currentExample = gestureName + '_' + str(index) + '_'
+        currentExample = cyrtranslit.to_latin(gestureName, 'ru') + '_' + str(index) + '_'
 
     print('You\'ll now be prompted to record the pose you want to add. \n \
                 Please place your hand beforehand facing the camera, and press any key when ready. \n \

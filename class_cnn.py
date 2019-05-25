@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_class_cnn_form(object):
     def setupUi(self, class_cnn_form):
         class_cnn_form.setObjectName("class_cnn_form")
-        class_cnn_form.resize(372, 300)
+        class_cnn_form.resize(368, 388)
         self.gestures_cb = QtWidgets.QComboBox(class_cnn_form)
         self.gestures_cb.setGeometry(QtCore.QRect(230, 10, 131, 22))
         self.gestures_cb.setObjectName("gestures_cb")
@@ -34,6 +34,17 @@ class Ui_class_cnn_form(object):
         self.ver_segm_lbl_5.setGeometry(QtCore.QRect(190, 0, 31, 31))
         self.ver_segm_lbl_5.setWordWrap(True)
         self.ver_segm_lbl_5.setObjectName("ver_segm_lbl_5")
+        self.gest_table = QtWidgets.QTableWidget(class_cnn_form)
+        self.gest_table.setGeometry(QtCore.QRect(10, 100, 261, 281))
+        self.gest_table.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self.gest_table.setWordWrap(True)
+        self.gest_table.setRowCount(1)
+        self.gest_table.setColumnCount(2)
+        self.gest_table.setObjectName("gest_table")
+        item = QtWidgets.QTableWidgetItem()
+        self.gest_table.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.gest_table.setHorizontalHeaderItem(1, item)
 
         self.retranslateUi(class_cnn_form)
         QtCore.QMetaObject.connectSlotsByName(class_cnn_form)
@@ -50,5 +61,9 @@ class Ui_class_cnn_form(object):
         self.ver_segm_lbl_4.setText(_translate("class_cnn_form", "Количество эпох"))
         self.add_pose.setText(_translate("class_cnn_form", "Добавить пример жеста"))
         self.ver_segm_lbl_5.setText(_translate("class_cnn_form", "Жест"))
+        item = self.gest_table.horizontalHeaderItem(0)
+        item.setText(_translate("class_cnn_form", "Название"))
+        item = self.gest_table.horizontalHeaderItem(1)
+        item.setText(_translate("class_cnn_form", "Количество примеров"))
 
 

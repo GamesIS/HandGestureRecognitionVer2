@@ -148,14 +148,14 @@ class HandPose:
         print(cap_params, args)
 
         # Count number of files to increment new example directory
-        poses = []
-        _file = open("poses.txt", "r")
-        lines = _file.readlines()
-        for line in lines:
-            line = line.strip()
-            if (line != ""):
-                print(line)
-                poses.append(line)
+        poses = self.main.Gestures.gestures
+        # _file = open("poses.txt", "r")
+        # lines = _file.readlines()
+        # for line in lines:
+        #     line = line.strip()
+        #     if (line != ""):
+        #         print(line)
+        #         poses.append(line)
 
         num_workers = 1 # TODO 4
         # spin up workers to paralleize detection.

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>372</width>
-    <height>300</height>
+    <width>368</width>
+    <height>388</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -100,6 +100,39 @@ p, li { white-space: pre-wrap; }
    <property name="wordWrap">
     <bool>true</bool>
    </property>
+  </widget>
+  <widget class="QTableWidget" name="gest_table">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>100</y>
+     <width>261</width>
+     <height>281</height>
+    </rect>
+   </property>
+   <property name="selectionMode">
+    <enum>QAbstractItemView::ExtendedSelection</enum>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
+   <property name="rowCount">
+    <number>1</number>
+   </property>
+   <property name="columnCount">
+    <number>2</number>
+   </property>
+   <row/>
+   <column>
+    <property name="text">
+     <string>Название</string>
+    </property>
+   </column>
+   <column>
+    <property name="text">
+     <string>Количество примеров</string>
+    </property>
+   </column>
   </widget>
  </widget>
  <resources/>

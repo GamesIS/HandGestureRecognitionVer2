@@ -161,16 +161,12 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         return False
 
     def start_hand_pose(self):
-        poses = db_utils.load_poses_names("poses.txt")
+        #poses = db_utils.load_poses_names("poses.txt")
         queue_size = 5
         inferences_q = Queue(maxsize=queue_size)
-        inferences = None
-        try:
-            inferences = inferences_q.get_nowait()
-        except Exception as e:
-            pass
+        inferences = inferences_q.get_nowait()
         values = [0.5, 0.2, 0.3]
-        gui.drawInferences(values, poses)
+        gui.drawInferences(values, self.Gestures.gestures)
 
     def start_detection(self):
         if self.recognition.recognition_started:
@@ -346,8 +342,30 @@ class ClassCNN(QtWidgets.QMainWindow):
     def add_pose(self):
         AddPose.main(self.ui.gestures_cb.currentText(), self.main.recognition.version_segm_cnn)
 
+    def init_table(self):
+        poses = self.main.Gestures
+        poses.__class__ = db_utils.Poses
+        self.ui.gest_table.setRowCount(len(poses.gestures))
+
+        row = 0
+        for item in poses.gestures:
+            one_cellinfo = QTableWidgetItem(item)
+            two_cellinfo = QTableWidgetItem(str(get_count_examples(item)))
+
+            # combo = QtWidgets.QComboBox()
+            # combo.addItem("Изучить")
+            # combo.addItem("Забыть")
+            # combo.addItem("Удалить")
+
+            self.ui.gest_table.setItem(row, 0, one_cellinfo)
+            self.ui.gest_table.setItem(row, 1, two_cellinfo)
+            #self.ui.gesture_table.setCellWidget(row, 1, combo)
+            row += 1
+        self.ui.gest_table.resizeColumnsToContents()
+
     def update_gestures_cb(self):
         self.ui.gestures_cb.clear()
+        self.init_table()
         self.ui.gestures_cb.addItems(self.main.Gestures.gestures)
 
 def check_folders(gestures):
@@ -362,6 +380,18 @@ def check_folders(gestures):
         newPath = 'TODELETE/' + gest
         if os.path.exists(oldPath):
             print(newPath)
+
+def get_count_examples(pose):
+    poses = os.listdir('Poses/')
+    count = 0
+    try:
+        subdirs = os.listdir('Poses/' + pose + '/')
+        for subdir in subdirs:
+            files = os.listdir('Poses/' + pose + '/' + subdir + '/')
+            count = count + len(files)
+    except Exception as e:
+        print(e)
+    return count
 
 def rename_folders(oldName, newName):
     index = 1
