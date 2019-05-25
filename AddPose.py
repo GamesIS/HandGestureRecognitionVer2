@@ -104,7 +104,7 @@ def start_create_imgs(currentPath, name_pose, currentExample, gestureName, index
             boxes, scores = detector_utils.detect_objects(frame, detection_graph, sess)
 
             # get region of interest
-            res = detector_utils.get_box_image(1, 0.2, scores, boxes, 640, 480, frame)
+            res = detector_utils.get_box_image(1, 0.13, scores, boxes, 640, 480, frame)
 
             # Save cropped image 
             if (res is not None):

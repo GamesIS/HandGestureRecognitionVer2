@@ -15,7 +15,7 @@ os.environ['KERAS_BACKEND'] = 'tensorflow'
 import gui
 
 frame_processed = 0
-score_thresh = 0.18
+score_thresh = 0.27
 window_name = 'Camera'
 
 
@@ -28,7 +28,7 @@ def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_
 
     print(">> loading keras model for worker")
     try:
-        model, classification_graph, session = classifier.load_KerasGraph("cnn/models/hand_poses_wGarbage_11.h5")
+        model, classification_graph, session = classifier.load_KerasGraph("cnn/models/hand_poses_wGarbage_13.h5")
     except Exception as e:
         print(e)
 
