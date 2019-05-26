@@ -34,10 +34,8 @@ def drawInferences(values, names):
         blank = np.array(img_pil)
         #cv2.putText(blank, names[i], (0, margin + int(margin * i) + int(thickness / 2)), cv2.FONT_HERSHEY_SIMPLEX, fontScale, fontColor,
         #            lineType)
-        try:
-            cv2.putText(blank, str(values[i]), (left_margin + 200, margin + int(margin * i) + int(thickness / 2)), cv2.FONT_HERSHEY_SIMPLEX,
-                        fontScale, fontColor, lineType)
-        except Exception as e:
-            print(e)
+        cv2.putText(blank, str(values[i]), (left_margin + 200, margin + int(margin * i) + int(thickness / 2)),
+                    cv2.FONT_HERSHEY_SIMPLEX,
+                    fontScale, fontColor, lineType)
 
     cv2.imshow("Inferences", blank)

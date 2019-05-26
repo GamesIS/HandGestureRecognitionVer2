@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>824</width>
-    <height>709</height>
+    <width>810</width>
+    <height>671</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="startButton">
     <property name="geometry">
      <rect>
-      <x>410</x>
-      <y>520</y>
+      <x>590</x>
+      <y>450</y>
       <width>191</width>
       <height>31</height>
      </rect>
@@ -478,8 +478,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QCheckBox" name="cb_json_2">
     <property name="geometry">
      <rect>
-      <x>620</x>
-      <y>530</y>
+      <x>640</x>
+      <y>490</y>
       <width>161</width>
       <height>17</height>
      </rect>
@@ -488,35 +488,6 @@ p, li { white-space: pre-wrap; }
      <string>Показывать счетчик FPS</string>
     </property>
     <property name="checked">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="countHandsCB_2">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>520</y>
-      <width>251</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="thr_lbl_segm_2">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>480</y>
-      <width>131</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="lineWidth">
-     <number>1</number>
-    </property>
-    <property name="text">
-     <string>Выбор доступной камеры</string>
-    </property>
-    <property name="wordWrap">
      <bool>true</bool>
     </property>
    </widget>
@@ -597,8 +568,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>120</x>
-      <y>570</y>
+      <x>60</x>
+      <y>260</y>
       <width>171</width>
       <height>91</height>
      </rect>
@@ -635,13 +606,133 @@ p, li { white-space: pre-wrap; }
      <string>Открыть мониторинг</string>
     </property>
    </widget>
+   <widget class="QComboBox" name="gestures_cb_2">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>390</y>
+      <width>131</width>
+      <height>22</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ver_segm_lbl_6">
+    <property name="geometry">
+     <rect>
+      <x>510</x>
+      <y>380</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Жест отвечающий за активацию системы классификации</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="monitoring_table">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>60</x>
+      <y>460</y>
+      <width>331</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="selectionMode">
+     <enum>QAbstractItemView::ExtendedSelection</enum>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+    <property name="rowCount">
+     <number>1</number>
+    </property>
+    <property name="columnCount">
+     <number>3</number>
+    </property>
+    <row/>
+    <column>
+     <property name="text">
+      <string>Название</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Средняя точность</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Вероятность</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QLabel" name="ver_segm_lbl_7">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>510</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="finish_gest">
+    <property name="geometry">
+     <rect>
+      <x>400</x>
+      <y>480</y>
+      <width>181</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Жест отвечающий за активацию системы классификации</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="ver_segm_lbl_8">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>520</y>
+      <width>361</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>11</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>ДЛЯ МОНИТОРИНГА ПО ГРУППАМ, УДАЛИТЬ СРЕДНЮЮ ТОЧНОСТЬ, СДЕЛАТЬ МОНИТОРИНГ ПОСТОЯННЫМ, ДОБАВИТЬ ВОЗМОЖНОСТЬ РЕДАКТИРОВАНИЯ(Порог мониторинга для распознавания), НАДО ПОКАЗАТЬ ЗАЧЕМ ЭТО.</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>824</width>
+     <width>810</width>
      <height>21</height>
     </rect>
    </property>

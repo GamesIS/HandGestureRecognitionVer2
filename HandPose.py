@@ -1,5 +1,4 @@
 import argparse
-import datetime
 import os;
 import time
 from multiprocessing import Queue, Pool
@@ -13,6 +12,7 @@ from utils.detector_utils import WebcamVideoStream
 
 os.environ['KERAS_BACKEND'] = 'tensorflow'
 import gui
+import monitoring as mon
 
 frame_processed = 0
 score_thresh = 0.27
@@ -21,16 +21,14 @@ window_name = 'Camera'
 
 # Create a worker thread that loads graph and
 # does detection on images in an input queue and puts it on an output queue
-def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_processed, settings_q, version_segm_cnn):
+def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_processed, settings_q,
+           version_segm_cnn):
     print(">> loading frozen model for worker")
     detection_graph, sess = detector_utils.load_inference_graph(version_segm_cnn)
     sess = tf.Session(graph=detection_graph)
 
     print(">> loading keras model for worker")
-    try:
-        model, classification_graph, session = classifier.load_KerasGraph("cnn/models/hand_poses_wGarbage_13.h5")
-    except Exception as e:
-        print(e)
+    model, classification_graph, session = classifier.load_KerasGraph("cnn/models/hand_poses_wGarbage_13.h5")
 
     while True:
         # print("> ===== in worker loop, frame ", frame_processed)
@@ -46,7 +44,8 @@ def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_
 
             # get region of interest
             res = detector_utils.get_box_image(settings.countHands, thresh,
-                                               scores, boxes, cap_params['im_width'], cap_params['im_height'], frame)
+                                               scores, boxes, cap_params['im_width'], cap_params['im_height'],
+                                               frame)
 
             # draw bounding boxes
             detector_utils.draw_box_on_image(settings.countHands, thresh,
@@ -130,14 +129,12 @@ class HandPose:
         cropped_output_q = Queue(maxsize=args.queue_size)
         inferences_q = Queue(maxsize=args.queue_size)
 
-
         if self.main.rb_ip_cam.isChecked():
             video_capture = WebcamVideoStream(
                 'http://192.168.0.84:8080/video', width=args.width, height=args.height).start()
         else:
             video_capture = WebcamVideoStream(
                 src=args.video_source, width=args.width, height=args.height).start()
-
 
         cap_params = {}
         frame_processed = 0
@@ -149,22 +146,14 @@ class HandPose:
 
         # Count number of files to increment new example directory
         poses = self.main.Gestures.gestures
-        # _file = open("poses.txt", "r")
-        # lines = _file.readlines()
-        # for line in lines:
-        #     line = line.strip()
-        #     if (line != ""):
-        #         print(line)
-        #         poses.append(line)
 
-        num_workers = 1 # TODO 4
+        num_workers = 1  # TODO 4
         # spin up workers to paralleize detection.
         pool = Pool(num_workers, worker,
-                    (input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_processed, settings_q, self.version_segm_cnn))
+                    (input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_processed, settings_q,
+                     self.version_segm_cnn))
 
-        #start_time = datetime.datetime.now()
         start_time_millis = int(round(time.time() * 1000))
-        num_frames = 0
         fps = 0
         index = 0
 
@@ -195,22 +184,16 @@ class HandPose:
             except Exception as e:
                 pass
 
-            #elapsed_time = (datetime.datetime.now() - start_time).total_seconds()
-            #num_frames += 1
-            #fps = num_frames / elapsed_time
-
             if self.settings.fpsISEnabled:
                 fps = int(1000 / (int(round(time.time() * 1000)) - start_time_millis))
 
             # Display inferences
             if (inferences is not None):
                 gui.drawInferences(inferences, poses)
-                try:
-                    if (self.main.cb_json.isChecked()):
-                        json_sender.send_json(inferences, poses, self.main.ip_host.toPlainText(),
-                                              int(self.main.port_host.toPlainText()))
-                except Exception as e:
-                    print(e)
+                mon.monitoring(names=poses, predictions=inferences, threshold=0.7, main=self.main)
+                if (self.main.cb_json.isChecked()):
+                    json_sender.send_json(inferences, poses, self.main.ip_host.toPlainText(),
+                                          int(self.main.port_host.toPlainText()))
 
             if (cropped_output is not None):
                 cropped_output = cv2.cvtColor(cropped_output, cv2.COLOR_RGB2BGR)
@@ -221,15 +204,6 @@ class HandPose:
                     # cv2.imwrite('image_' + str(num_frames) + '.png', cropped_output)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         break
-                # else:
-                #     if (num_frames == 400):
-                #         num_frames = 0
-                #         start_time = datetime.datetime.now()
-                #     else:
-                #         print("frames processed: ", index, "elapsed time: ",
-                #               elapsed_time, "fps: ", str(int(fps)))
-
-            # print("frame ",  index, num_frames, elapsed_time, fps)
 
             if (output_frame is not None):
                 output_frame = cv2.cvtColor(output_frame, cv2.COLOR_RGB2BGR)
@@ -240,13 +214,6 @@ class HandPose:
                     cv2.imshow(window_name, output_frame)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         break
-                # else:
-                #     if (num_frames == 400):
-                #         num_frames = 0
-                #         start_time = datetime.datetime.now()
-                #     else:
-                #         print("frames processed: ", index, "elapsed time: ",
-                #               elapsed_time, "fps: ", str(int(fps)))
             else:
                 print("video end")
                 break
@@ -256,6 +223,5 @@ class HandPose:
         self.recognition_off()
 
     def recognition_off(self):
-        if(self.recognition_started != False):
+        if (self.recognition_started != False):
             self.main.start_detection()
-        # self.main.button

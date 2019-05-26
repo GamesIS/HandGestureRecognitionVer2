@@ -14,6 +14,7 @@ import design  # Это наш конвертированный файл диз�
 import gestures
 import gui
 import class_cnn
+import monitoring as mon
 from cnn import cnn
 from utils import db_utils as db_utils
 
@@ -46,12 +47,12 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         self.startButton.clicked.connect(self.start_hand_pose)
         self.recognition = rec_class.HandPose(mainController=self)
         self.recognition.settings.threshold = float(self.trsh_segm_sldr.value() / 100)
-        self.recognition.settings.threshold = float(self.trsh_segm_sldr.value() / 100)
         self.recognition.version_segm_cnn = SEGM_CNN_VERSION_1
-
         self.startDetection.clicked.connect(self.start_detection)
         self.setWindowIcon(QtGui.QIcon('icon.png'))
-        self.close
+        #self.close
+
+        self.init_table()
 
         self.rb_def_cam.mode = 0
         self.rb_ip_cam.mode = 1
@@ -170,6 +171,8 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         values = [0.5, 0.2, 0.3]
         gui.drawInferences(values, self.Gestures.gestures)
 
+        #mon.monitoring()
+
     def start_detection(self):
         if self.recognition.recognition_started:
             self.recognition.recognition_started = False
@@ -213,17 +216,86 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
             self.gestures_win.init_table()
 
     def open_class_cnn_win(self):
-        try:
+        if not self.class_cnn_win:
+            self.class_cnn_win = ClassCNN(self)
+        if self.class_cnn_win.isVisible():
+            self.class_cnn_win.hide()
+        else:
+            self.class_cnn_win.show()
+            self.class_cnn_win.update_gestures_cb()
 
-            if not self.class_cnn_win:
-                self.class_cnn_win = ClassCNN(self)
-            if self.class_cnn_win.isVisible():
-                self.class_cnn_win.hide()
-            else:
-                self.class_cnn_win.show()
-                self.class_cnn_win.update_gestures_cb()
-        except Exception as e:
-            print(e)
+    abs_list = []
+    avg_list = []
+
+    def init_table(self):
+        row = 0
+        self.monitoring_table.setRowCount(len(self.Gestures.gestures))
+        for gesture in self.Gestures.gestures:
+            one_cellinfo = QTableWidgetItem(gesture)
+            avg = 0
+            abs = 0
+            three_cellinfo = QTableWidgetItem(0)
+
+            self.monitoring_table.setItem(row, 0, one_cellinfo)
+
+            # Создаем QProgressBar
+            avg_progr = QtWidgets.QProgressBar()
+            avg_progr.setMinimum(0)
+            avg_progr.setMaximum(100)
+
+            # Формат вывода: 10.50%
+            avg_progr.setValue(avg)
+            avg_progr.setFormat('{0:.2f}%'.format(avg))
+
+            # Создаем QProgressBar
+            abs_progr = QtWidgets.QProgressBar()
+            abs_progr.setMinimum(0)
+            abs_progr.setMaximum(100)
+
+            # Формат вывода: 10.50%
+            abs_progr.setValue(abs)
+            abs_progr.setFormat('{0:.2f}%'.format(abs))
+
+            self.monitoring_table.setCellWidget(row, 1, avg_progr)
+            self.monitoring_table.setCellWidget(row, 2, abs_progr)
+
+            self.abs_list.append(abs_progr)
+            self.avg_list.append(avg_progr)
+
+            row += 1
+
+        self.monitoring_table.resizeColumnsToContents()
+
+    def items_clear(self):
+        for item in self.monitoring_table.selectedItems():
+            newitem = QTableWidgetItem()
+            self.tableWidget.setItem(item.row(), item.column(), newitem)
+
+    def fill_table(self, finish_predictions, last_gesture):
+        row = 0
+        self.items_clear()
+        self.monitoring_table.setRowCount(len(self.Gestures.gestures))
+        for cnt_name in finish_predictions:
+            one_cellinfo = QTableWidgetItem(cnt_name.name)
+            avg = cnt_name.avg_pred * 100
+            abs = cnt_name.abs_ver * 100
+
+            self.avg_list[row].setValue(avg)
+            self.avg_list[row].setFormat('{0:.2f}%'.format(avg))
+
+            self.abs_list[row].setValue(abs)
+            self.abs_list[row].setFormat('{0:.2f}%'.format(abs))
+
+
+            self.monitoring_table.setItem(row, 0, one_cellinfo)
+            #self.monitoring_table.setItem(row, 2, abs_progr)
+
+            row += 1
+
+        if last_gesture != None:
+            self.finish_gest.setText("Распознан жест: " + last_gesture.name)
+
+        self.monitoring_table.resizeColumnsToContents()
 
 
 class GesturesWin(QtWidgets.QMainWindow):
@@ -271,58 +343,51 @@ class GesturesWin(QtWidgets.QMainWindow):
             row += 1
 
     def save_gesture_json(self):
-        try:
+        poses = self.main.Gestures
+        poses.__class__ = db_utils.Poses
 
-            poses = self.main.Gestures
-            poses.__class__ = db_utils.Poses
-
-            gestures = []
-            group = poses.group
-            gestures_group = []
-            for row in range(self.ui.gesture_table.rowCount()):
-                gestures.append(self.ui.gesture_table.item(row, 0).text())
-                grp = self.ui.gesture_table.item(row, 1).text()
-                if grp not in poses.group:
-                    group.append(grp)
-                gestures_group.append(group.index(grp))
-            minIndex = len(poses.gestures)
-            if minIndex > len(gestures):
-                minIndex = len(gestures)
-            minIndex = minIndex - 1
-            index = 0
-            for oldGesture in poses.gestures:
-                if index > minIndex:
-                    break
-                if gestures[index] != oldGesture:
-                    rename_folders(oldGesture, gestures[index])
-                index = index + 1
-            poses.gestures = gestures
-            #check_folders(poses.gestures)
-            poses.group = group
-            poses.gestures_group = gestures_group
-            db_utils.save_json_poses(poses)
-        except Exception as e:
-            print(e)
+        gestures = []
+        group = poses.group
+        gestures_group = []
+        for row in range(self.ui.gesture_table.rowCount()):
+            gestures.append(self.ui.gesture_table.item(row, 0).text())
+            grp = self.ui.gesture_table.item(row, 1).text()
+            if grp not in poses.group:
+                group.append(grp)
+            gestures_group.append(group.index(grp))
+        minIndex = len(poses.gestures)
+        if minIndex > len(gestures):
+            minIndex = len(gestures)
+        minIndex = minIndex - 1
+        index = 0
+        for oldGesture in poses.gestures:
+            if index > minIndex:
+                break
+            if gestures[index] != oldGesture:
+                rename_folders(oldGesture, gestures[index])
+            index = index + 1
+        poses.gestures = gestures
+        # check_folders(poses.gestures)
+        poses.group = group
+        poses.gestures_group = gestures_group
+        db_utils.save_json_poses(poses)
 
     def validate_table(self):
-        try:
-            poses = self.main.Gestures
-            poses.__class__ = db_utils.Poses
-            current_gest = self.get_all_gest_str()
+        poses = self.main.Gestures
+        poses.__class__ = db_utils.Poses
+        current_gest = self.get_all_gest_str()
 
-            for row in range(self.ui.gesture_table.rowCount()):
-                if current_gest.count(self.ui.gesture_table.item(row, 0).text()) > 1:
-                    self.ui.save_gesture.setEnabled(False)
-                    self.ui.add_gesture.setEnabled(False)
-                    show_error("Название жеста должно быть уникальным.", "Предупреждение")
-                    return
-                if self.ui.gesture_table.item(row, 0).text() == "":
-                    show_error("Названи жеста не может быть пустым", "Предупреждение")
+        for row in range(self.ui.gesture_table.rowCount()):
+            if current_gest.count(self.ui.gesture_table.item(row, 0).text()) > 1:
+                self.ui.save_gesture.setEnabled(False)
+                self.ui.add_gesture.setEnabled(False)
+                show_error("Название жеста должно быть уникальным.", "Предупреждение")
+                return
+            if self.ui.gesture_table.item(row, 0).text() == "":
+                show_error("Названи жеста не может быть пустым", "Предупреждение")
 
-            self.ui.save_gesture.setEnabled(True)
-            self.ui.add_gesture.setEnabled(True)
-        except Exception as e:
-            print(e)
+        self.ui.save_gesture.setEnabled(True)
+        self.ui.add_gesture.setEnabled(True)
 
     def get_all_gest_str(self):
         gestures = []
@@ -376,30 +441,14 @@ class ClassCNN(QtWidgets.QMainWindow):
         self.init_table()
         self.ui.gestures_cb.addItems(self.main.Gestures.gestures)
 
-# def check_folders(gestures):
-#     all_gestures = os.listdir('Poses/')
-#     tmpList = []
-#     for gest in all_gestures:
-#         if gest not in gestures:
-#             tmpList.append(gest)
-#
-#     for gest in tmpList:
-#         oldPath = 'Poses/' + gest
-#         newPath = 'TODELETE/' + gest
-#         if os.path.exists(oldPath):
-#             print(newPath)
-
 def get_count_examples(pose):
     pose = cyrtranslit.to_latin(pose, 'ru')
     poses = os.listdir('Poses/')
     count = 0
-    try:
-        subdirs = os.listdir('Poses/' + pose + '/')
-        for subdir in subdirs:
-            files = os.listdir('Poses/' + pose + '/' + subdir + '/')
-            count = count + len(files)
-    except Exception as e:
-        print(e)
+    subdirs = os.listdir('Poses/' + pose + '/')
+    for subdir in subdirs:
+        files = os.listdir('Poses/' + pose + '/' + subdir + '/')
+        count = count + len(files)
     return count
 
 def rename_folders(oldName, newName):
