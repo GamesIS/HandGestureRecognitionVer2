@@ -1,0 +1,100 @@
+# -*- coding: utf-8 -*-
+
+# Form implementation generated from reading ui file 'monitoring.ui'
+#
+# Created by: PyQt5 UI code generator 5.12.2
+#
+# WARNING! All changes made in this file will be lost!
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+
+
+class Ui_monitoring_form(object):
+    def setupUi(self, monitoring_form):
+        monitoring_form.setObjectName("monitoring_form")
+        monitoring_form.resize(474, 509)
+        self.tabWidget = QtWidgets.QTabWidget(monitoring_form)
+        self.tabWidget.setGeometry(QtCore.QRect(10, 10, 451, 501))
+        self.tabWidget.setObjectName("tabWidget")
+        self.tab = QtWidgets.QWidget()
+        self.tab.setObjectName("tab")
+        self.finish_gest = QtWidgets.QLabel(self.tab)
+        self.finish_gest.setGeometry(QtCore.QRect(80, 420, 381, 51))
+        font = QtGui.QFont()
+        font.setFamily("Arial")
+        font.setPointSize(16)
+        font.setBold(True)
+        font.setWeight(75)
+        self.finish_gest.setFont(font)
+        self.finish_gest.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.finish_gest.setWordWrap(True)
+        self.finish_gest.setObjectName("finish_gest")
+        self.thr_lbl_class_2 = QtWidgets.QLabel(self.tab)
+        self.thr_lbl_class_2.setGeometry(QtCore.QRect(20, 350, 151, 31))
+        self.thr_lbl_class_2.setLineWidth(1)
+        self.thr_lbl_class_2.setWordWrap(True)
+        self.thr_lbl_class_2.setObjectName("thr_lbl_class_2")
+        self.monitoring_table = QtWidgets.QTableWidget(self.tab)
+        self.monitoring_table.setEnabled(True)
+        self.monitoring_table.setGeometry(QtCore.QRect(10, 10, 341, 341))
+        self.monitoring_table.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
+        self.monitoring_table.setWordWrap(True)
+        self.monitoring_table.setRowCount(1)
+        self.monitoring_table.setColumnCount(3)
+        self.monitoring_table.setObjectName("monitoring_table")
+        item = QtWidgets.QTableWidgetItem()
+        self.monitoring_table.setHorizontalHeaderItem(0, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.monitoring_table.setHorizontalHeaderItem(1, item)
+        item = QtWidgets.QTableWidgetItem()
+        self.monitoring_table.setHorizontalHeaderItem(2, item)
+        self.trsh_class_sldr_2 = QtWidgets.QSlider(self.tab)
+        self.trsh_class_sldr_2.setGeometry(QtCore.QRect(20, 380, 221, 22))
+        self.trsh_class_sldr_2.setMinimum(1)
+        self.trsh_class_sldr_2.setProperty("value", 27)
+        self.trsh_class_sldr_2.setOrientation(QtCore.Qt.Horizontal)
+        self.trsh_class_sldr_2.setObjectName("trsh_class_sldr_2")
+        self.cb_json_3 = QtWidgets.QCheckBox(self.tab)
+        self.cb_json_3.setGeometry(QtCore.QRect(130, 410, 271, 20))
+        self.cb_json_3.setChecked(True)
+        self.cb_json_3.setObjectName("cb_json_3")
+        self.thr_lbl_class_val_2 = QtWidgets.QLabel(self.tab)
+        self.thr_lbl_class_val_2.setGeometry(QtCore.QRect(250, 370, 31, 31))
+        font = QtGui.QFont()
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setWeight(75)
+        self.thr_lbl_class_val_2.setFont(font)
+        self.thr_lbl_class_val_2.setLineWidth(1)
+        self.thr_lbl_class_val_2.setWordWrap(True)
+        self.thr_lbl_class_val_2.setObjectName("thr_lbl_class_val_2")
+        self.tabWidget.addTab(self.tab, "")
+        self.tab_2 = QtWidgets.QWidget()
+        self.tab_2.setObjectName("tab_2")
+        self.tabWidget.addTab(self.tab_2, "")
+        self.tab_3 = QtWidgets.QWidget()
+        self.tab_3.setObjectName("tab_3")
+        self.tabWidget.addTab(self.tab_3, "")
+
+        self.retranslateUi(monitoring_form)
+        self.tabWidget.setCurrentIndex(0)
+        QtCore.QMetaObject.connectSlotsByName(monitoring_form)
+
+    def retranslateUi(self, monitoring_form):
+        _translate = QtCore.QCoreApplication.translate
+        monitoring_form.setWindowTitle(_translate("monitoring_form", "Мониторинг"))
+        self.finish_gest.setText(_translate("monitoring_form", "Жестов не распознано"))
+        self.thr_lbl_class_2.setText(_translate("monitoring_form", "Минимальный процент, для "))
+        item = self.monitoring_table.horizontalHeaderItem(0)
+        item.setText(_translate("monitoring_form", "Название"))
+        item = self.monitoring_table.horizontalHeaderItem(1)
+        item.setText(_translate("monitoring_form", "Средняя точность"))
+        item = self.monitoring_table.horizontalHeaderItem(2)
+        item.setText(_translate("monitoring_form", "Вероятность"))
+        self.cb_json_3.setText(_translate("monitoring_form", "Передавать в JSON только конечный результат"))
+        self.thr_lbl_class_val_2.setText(_translate("monitoring_form", "0.27"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), _translate("monitoring_form", "Tab 1"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), _translate("monitoring_form", "Tab 2"))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_3), _translate("monitoring_form", "Page"))
+
+

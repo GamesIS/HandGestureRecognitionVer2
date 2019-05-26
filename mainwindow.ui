@@ -53,8 +53,8 @@
    <widget class="QPushButton" name="startDetection_2">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>410</y>
+      <x>430</x>
+      <y>390</y>
       <width>131</width>
       <height>41</height>
      </rect>
@@ -461,14 +461,14 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>320</y>
-      <width>441</width>
-      <height>41</height>
+      <y>240</y>
+      <width>231</width>
+      <height>31</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>16</pointsize>
+      <pointsize>8</pointsize>
      </font>
     </property>
     <property name="text">
@@ -491,24 +491,11 @@ p, li { white-space: pre-wrap; }
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QPushButton" name="startDetection_3">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>370</y>
-      <width>501</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>РЕЗУЛЬТАТЫ КЛАССИФИКАЦИИ НА ИТОГОВОМ ИЗОБРАЖЕНИИ В РАЗНЫХ ЦВЕТАХ</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="thr_lbl_segm_3">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>200</y>
+      <x>670</x>
+      <y>160</y>
       <width>281</width>
       <height>131</height>
      </rect>
@@ -531,8 +518,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="thr_lbl_segm_4">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>180</y>
+      <x>560</x>
+      <y>220</y>
       <width>231</width>
       <height>121</height>
      </rect>
@@ -565,53 +552,12 @@ p, li { white-space: pre-wrap; }
      <string>Открыть список жестов</string>
     </property>
    </widget>
-   <widget class="QTabWidget" name="tabWidget">
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>260</y>
-      <width>171</width>
-      <height>91</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>1</number>
-    </property>
-    <widget class="QWidget" name="tab">
-     <attribute name="title">
-      <string>Tab 1</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="tab_2">
-     <attribute name="title">
-      <string>Tab 2</string>
-     </attribute>
-    </widget>
-    <widget class="QWidget" name="tab_3">
-     <attribute name="title">
-      <string>Page</string>
-     </attribute>
-    </widget>
-   </widget>
-   <widget class="QPushButton" name="startDetection_4">
-    <property name="geometry">
-     <rect>
-      <x>480</x>
-      <y>440</y>
-      <width>131</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Открыть мониторинг</string>
-    </property>
-   </widget>
    <widget class="QComboBox" name="gestures_cb_2">
     <property name="geometry">
      <rect>
-      <x>680</x>
-      <y>390</y>
-      <width>131</width>
+      <x>130</x>
+      <y>190</y>
+      <width>111</width>
       <height>22</height>
      </rect>
     </property>
@@ -619,10 +565,10 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="ver_segm_lbl_6">
     <property name="geometry">
      <rect>
-      <x>510</x>
-      <y>380</y>
-      <width>181</width>
-      <height>41</height>
+      <x>10</x>
+      <y>180</y>
+      <width>111</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
@@ -631,47 +577,6 @@ p, li { white-space: pre-wrap; }
     <property name="wordWrap">
      <bool>true</bool>
     </property>
-   </widget>
-   <widget class="QTableWidget" name="monitoring_table">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>60</x>
-      <y>460</y>
-      <width>331</width>
-      <height>171</height>
-     </rect>
-    </property>
-    <property name="selectionMode">
-     <enum>QAbstractItemView::ExtendedSelection</enum>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-    <property name="rowCount">
-     <number>1</number>
-    </property>
-    <property name="columnCount">
-     <number>3</number>
-    </property>
-    <row/>
-    <column>
-     <property name="text">
-      <string>Название</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Средняя точность</string>
-     </property>
-    </column>
-    <column>
-     <property name="text">
-      <string>Вероятность</string>
-     </property>
-    </column>
    </widget>
    <widget class="QLabel" name="ver_segm_lbl_7">
     <property name="geometry">
@@ -684,22 +589,6 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="text">
      <string/>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="finish_gest">
-    <property name="geometry">
-     <rect>
-      <x>400</x>
-      <y>480</y>
-      <width>181</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Жест отвечающий за активацию системы классификации</string>
     </property>
     <property name="wordWrap">
      <bool>true</bool>
