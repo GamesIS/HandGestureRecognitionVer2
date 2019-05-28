@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Мониторинг</string>
   </property>
-  <widget class="QTabWidget" name="tabWidget">
+  <widget class="QTabWidget" name="monitor_tabs">
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -22,12 +22,15 @@
      <height>501</height>
     </rect>
    </property>
+   <property name="toolTipDuration">
+    <number>-3</number>
+   </property>
    <property name="currentIndex">
     <number>0</number>
    </property>
-   <widget class="QWidget" name="tab">
+   <widget class="QWidget" name="single_tab">
     <attribute name="title">
-     <string>Tab 1</string>
+     <string>Одиночные</string>
     </attribute>
     <widget class="QLabel" name="finish_gest">
      <property name="geometry">
@@ -178,9 +181,9 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="tab_2">
+   <widget class="QWidget" name="group_tab">
     <attribute name="title">
-     <string>Tab 2</string>
+     <string>Групповые</string>
     </attribute>
    </widget>
    <widget class="QWidget" name="tab_3">

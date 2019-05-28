@@ -57,8 +57,8 @@ def calculate_monit(names, main):
     if finish_gesture != None:
          gesture_q.queue.clear()
          gesture_l.clear()
-    main.fill_table(count_names, finish_gesture)
-
+    if main.monitor != None:
+        main.monitor.fill_table(count_names, finish_gesture)
 def create_cnt_names(names):
     count_names = []
     for name in names:

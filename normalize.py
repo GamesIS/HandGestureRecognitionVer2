@@ -26,6 +26,8 @@ def normalize(gesture, index):
                     im = cv2.resize(im, (28, 28), interpolation=cv2.INTER_AREA)
                     # Write image
                     cv2.imwrite(path, im)
+        path = os.path.realpath(abs_path)
+        os.startfile(path)
         return
 
 
