@@ -45,15 +45,7 @@ def calculate_monit(names, main):
         cnt_name.calc_abs_ver(length_list)
         if cnt_name.abs_ver > 0.7: #and last_pred.name == cnt_name.name:
             finish_gesture = cnt_name
-    # print("")
-    # print("")
-    # print("/////////////////////////////////")
-    # for cnt_name in count_names:
-    #     print("Жест ", cnt_name.name, "\tсредняя точность ", str(cnt_name.avg_pred * 100)
-    #           , "%\tабсолютная вероятность жеста ", str(cnt_name.abs_ver * 100), "%")
-    # print("/////////////////////////////////")
-    #
-    #     print("Распознан жест: ", finish_gesture.name)
+
     if finish_gesture != None:
          gesture_q.queue.clear()
          gesture_l.clear()

@@ -45,13 +45,11 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         # и т.д. в файле design.py
         super().__init__()
         self.setupUi(self)  # Это нужно для инициализации нашего дизайна
-        self.startButton.clicked.connect(self.start_hand_pose)
         self.recognition = rec_class.HandPose(mainController=self)
         self.recognition.settings.threshold = float(self.trsh_segm_sldr.value() / 100)
         self.recognition.version_segm_cnn = SEGM_CNN_VERSION_1
         self.startDetection.clicked.connect(self.start_detection)
         self.setWindowIcon(QtGui.QIcon('icon.png'))
-        #self.close
 
         self.rb_def_cam.mode = 0
         self.rb_ip_cam.mode = 1
@@ -80,6 +78,20 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         self.monitor = None
         self.open_monitor_btn.clicked.connect(self.open_monitor_win)
 
+        poses = self.Gestures.gestures.copy()
+        poses.insert(0, "Нет жеста")
+        self.class_gest_cb.addItems(poses)
+        self.class_gest_cb.activated.connect(self.class_gest_cb_changed)
+
+        self.details_cb.clicked.connect(self.destroy_cv2)
+        self.fps_enabled.clicked.connect(self.power_fps)
+
+    def power_fps(self):
+        self.recognition.power_fps(self.fps_enabled.isChecked())
+
+    def destroy_cv2(self):
+        self.recognition.power_details(self.details_cb.isChecked())
+
     def count_hands_changed(self):
         if self.countHandsCB.currentIndex() == 0:
             self.recognition.settings.countHands = 1
@@ -87,6 +99,9 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
             self.recognition.settings.countHands = 2
         elif self.countHandsCB.currentIndex() == 2:
             self.recognition.settings.countHands = 10
+
+    def class_gest_cb_changed(self):
+        pass
 
     def change_segm_cnn(self):
         if self.rb_segm_1.isChecked():
@@ -165,15 +180,6 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
             return True
         return False
 
-    def start_hand_pose(self):
-        #poses = db_utils.load_poses_names("poses.txt")
-        queue_size = 5
-        inferences_q = Queue(maxsize=queue_size)
-        inferences = inferences_q.get_nowait()
-        values = [0.5, 0.2, 0.3]
-        gui.drawInferences(values, self.Gestures.gestures)
-
-        #mon.monitoring()
 
     def start_detection(self):
         if self.recognition.recognition_started:

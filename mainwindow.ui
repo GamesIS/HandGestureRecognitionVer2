@@ -14,19 +14,6 @@
    <string>Система распознавания жестов руки</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="startButton">
-    <property name="geometry">
-     <rect>
-      <x>590</x>
-      <y>450</y>
-      <width>191</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Включить делати классификации</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="startDetection">
     <property name="geometry">
      <rect>
@@ -53,9 +40,9 @@
    <widget class="QPushButton" name="open_monitor_btn">
     <property name="geometry">
      <rect>
-      <x>360</x>
-      <y>390</y>
-      <width>131</width>
+      <x>630</x>
+      <y>370</y>
+      <width>151</width>
       <height>41</height>
      </rect>
     </property>
@@ -475,11 +462,11 @@ p, li { white-space: pre-wrap; }
      <string>Редактирование классифицирующей NN</string>
     </property>
    </widget>
-   <widget class="QCheckBox" name="cb_json_2">
+   <widget class="QCheckBox" name="fps_enabled">
     <property name="geometry">
      <rect>
-      <x>640</x>
-      <y>490</y>
+      <x>320</x>
+      <y>340</y>
       <width>161</width>
       <height>17</height>
      </rect>
@@ -494,8 +481,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="thr_lbl_segm_3">
     <property name="geometry">
      <rect>
-      <x>670</x>
-      <y>160</y>
+      <x>0</x>
+      <y>500</y>
       <width>281</width>
       <height>131</height>
      </rect>
@@ -543,7 +530,7 @@ p, li { white-space: pre-wrap; }
     <property name="geometry">
      <rect>
       <x>630</x>
-      <y>330</y>
+      <y>320</y>
       <width>151</width>
       <height>41</height>
      </rect>
@@ -552,7 +539,7 @@ p, li { white-space: pre-wrap; }
      <string>Открыть список жестов</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="gestures_cb_2">
+   <widget class="QComboBox" name="class_gest_cb">
     <property name="geometry">
      <rect>
       <x>130</x>
@@ -612,6 +599,46 @@ p, li { white-space: pre-wrap; }
      <string>ДЛЯ МОНИТОРИНГА ПО ГРУППАМ, УДАЛИТЬ СРЕДНЮЮ ТОЧНОСТЬ, СДЕЛАТЬ МОНИТОРИНГ ПОСТОЯННЫМ, ДОБАВИТЬ ВОЗМОЖНОСТЬ РЕДАКТИРОВАНИЯ(Порог мониторинга для распознавания), НАДО ПОКАЗАТЬ ЗАЧЕМ ЭТО.</string>
     </property>
     <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="thr_lbl_segm_5">
+    <property name="geometry">
+     <rect>
+      <x>80</x>
+      <y>400</y>
+      <width>231</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="lineWidth">
+     <number>1</number>
+    </property>
+    <property name="text">
+     <string>Сделать Resize при IP Cam</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="details_cb">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>320</y>
+      <width>161</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Детали классификации</string>
+    </property>
+    <property name="checked">
      <bool>true</bool>
     </property>
    </widget>
