@@ -14,6 +14,7 @@ import design  # Это наш конвертированный файл диз�
 import gestures
 import gui
 import class_cnn
+import gui_monitoring
 import monitoring as mon
 from cnn import cnn
 from utils import db_utils as db_utils
@@ -52,8 +53,6 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         self.setWindowIcon(QtGui.QIcon('icon.png'))
         #self.close
 
-        self.init_table()
-
         self.rb_def_cam.mode = 0
         self.rb_ip_cam.mode = 1
         self.rb_def_cam.toggled.connect(self.on_clicked_rb)
@@ -77,6 +76,9 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
 
         self.class_cnn_win = None
         self.sett_class_cnn.clicked.connect(self.open_class_cnn_win)
+
+        self.monitor = None
+        self.open_monitor_btn.clicked.connect(self.open_monitor_win)
 
     def count_hands_changed(self):
         if self.countHandsCB.currentIndex() == 0:
@@ -224,79 +226,14 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
             self.class_cnn_win.show()
             self.class_cnn_win.update_gestures_cb()
 
-    abs_list = []
-    avg_list = []
-
-    def init_table(self):
-        row = 0
-        self.monitoring_table.setRowCount(len(self.Gestures.gestures))
-        for gesture in self.Gestures.gestures:
-            one_cellinfo = QTableWidgetItem(gesture)
-            avg = 0
-            abs = 0
-            three_cellinfo = QTableWidgetItem(0)
-
-            self.monitoring_table.setItem(row, 0, one_cellinfo)
-
-            # Создаем QProgressBar
-            avg_progr = QtWidgets.QProgressBar()
-            avg_progr.setMinimum(0)
-            avg_progr.setMaximum(100)
-
-            # Формат вывода: 10.50%
-            avg_progr.setValue(avg)
-            avg_progr.setFormat('{0:.2f}%'.format(avg))
-
-            # Создаем QProgressBar
-            abs_progr = QtWidgets.QProgressBar()
-            abs_progr.setMinimum(0)
-            abs_progr.setMaximum(100)
-
-            # Формат вывода: 10.50%
-            abs_progr.setValue(abs)
-            abs_progr.setFormat('{0:.2f}%'.format(abs))
-
-            self.monitoring_table.setCellWidget(row, 1, avg_progr)
-            self.monitoring_table.setCellWidget(row, 2, abs_progr)
-
-            self.abs_list.append(abs_progr)
-            self.avg_list.append(avg_progr)
-
-            row += 1
-
-        self.monitoring_table.resizeColumnsToContents()
-
-    def items_clear(self):
-        for item in self.monitoring_table.selectedItems():
-            newitem = QTableWidgetItem()
-            self.tableWidget.setItem(item.row(), item.column(), newitem)
-
-    def fill_table(self, finish_predictions, last_gesture):
-        row = 0
-        self.items_clear()
-        self.monitoring_table.setRowCount(len(self.Gestures.gestures))
-        for cnt_name in finish_predictions:
-            one_cellinfo = QTableWidgetItem(cnt_name.name)
-            avg = cnt_name.avg_pred * 100
-            abs = cnt_name.abs_ver * 100
-
-            self.avg_list[row].setValue(avg)
-            self.avg_list[row].setFormat('{0:.2f}%'.format(avg))
-
-            self.abs_list[row].setValue(abs)
-            self.abs_list[row].setFormat('{0:.2f}%'.format(abs))
-
-
-            self.monitoring_table.setItem(row, 0, one_cellinfo)
-            #self.monitoring_table.setItem(row, 2, abs_progr)
-
-            row += 1
-
-        if last_gesture != None:
-            self.finish_gest.setText("Распознан жест: " + last_gesture.name)
-
-        self.monitoring_table.resizeColumnsToContents()
-
+    def open_monitor_win(self):
+        if not self.monitor:
+            self.monitor = Monitor(self)
+        if self.monitor.isVisible():
+            self.monitor.hide()
+        else:
+            self.monitor.show()
+            # self.monitor.update_gestures_cb()
 
 class GesturesWin(QtWidgets.QMainWindow):
     main = None
@@ -440,6 +377,80 @@ class ClassCNN(QtWidgets.QMainWindow):
         self.ui.gestures_cb.clear()
         self.init_table()
         self.ui.gestures_cb.addItems(self.main.Gestures.gestures)
+
+class Monitor(QtWidgets.QMainWindow):
+    main = None
+
+    abs_list = []
+    avg_list = []
+
+    def __init__(self, parent):
+        QtWidgets.QMainWindow.__init__(self, parent)
+        self.main = parent
+        self.ui = gui_monitoring.Ui_monitoring_form()
+        self.ui.setupUi(self)
+        self.init_table()
+
+    def init_table(self):
+        row = 0
+        self.ui.monitoring_table.setRowCount(len(self.main.Gestures.gestures))
+        for gesture in self.main.Gestures.gestures:
+            one_cellinfo = QTableWidgetItem(gesture)
+            avg = 0
+            abs = 0
+
+            self.ui.monitoring_table.setItem(row, 0, one_cellinfo)
+
+            # Создаем QProgressBar
+            avg_progr = QtWidgets.QProgressBar()
+            avg_progr.setMinimum(0)
+            avg_progr.setMaximum(100)
+
+            # Формат вывода: 10.50%
+            avg_progr.setValue(avg)
+            avg_progr.setFormat('{0:.2f}%'.format(avg))
+
+            # Создаем QProgressBar
+            abs_progr = QtWidgets.QProgressBar()
+            abs_progr.setMinimum(0)
+            abs_progr.setMaximum(100)
+
+            # Формат вывода: 10.50%
+            abs_progr.setValue(abs)
+            abs_progr.setFormat('{0:.2f}%'.format(abs))
+
+            self.ui.monitoring_table.setCellWidget(row, 1, avg_progr)
+            self.ui.monitoring_table.setCellWidget(row, 2, abs_progr)
+
+            self.abs_list.append(abs_progr)
+            self.avg_list.append(avg_progr)
+
+            row += 1
+
+            self.ui.monitoring_table.resizeColumnsToContents()
+
+    def fill_table(self, finish_predictions, last_gesture):
+        row = 0
+        self.ui.monitoring_table.setRowCount(len(self.main.Gestures.gestures))
+        for cnt_name in finish_predictions:
+            one_cellinfo = QTableWidgetItem(cnt_name.name)
+            avg = cnt_name.avg_pred * 100
+            abs = cnt_name.abs_ver * 100
+
+            self.avg_list[row].setValue(avg)
+            self.avg_list[row].setFormat('{0:.2f}%'.format(avg))
+
+            self.abs_list[row].setValue(abs)
+            self.abs_list[row].setFormat('{0:.2f}%'.format(abs))
+
+            self.ui.monitoring_table.setItem(row, 0, one_cellinfo)#TODO может тоже просто значение менять
+
+            row += 1
+
+        if last_gesture != None:
+            self.ui.finish_gest.setText("Распознан жест: " + last_gesture.name)
+
+        self.ui.monitoring_table.resizeColumnsToContents()
 
 def get_count_examples(pose):
     pose = cyrtranslit.to_latin(pose, 'ru')

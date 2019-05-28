@@ -50,10 +50,10 @@
      <string>Включить отслеживание</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="startDetection_2">
+   <widget class="QPushButton" name="open_monitor_btn">
     <property name="geometry">
      <rect>
-      <x>430</x>
+      <x>360</x>
       <y>390</y>
       <width>131</width>
       <height>41</height>
