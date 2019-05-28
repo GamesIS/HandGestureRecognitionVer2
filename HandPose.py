@@ -131,7 +131,7 @@ class HandPose:
 
         if self.main.rb_ip_cam.isChecked():
             video_capture = WebcamVideoStream(
-                'http://192.168.0.84:8080/video', width=args.width, height=args.height).start()
+                self.main.address_cam.toPlainText(), width=args.width, height=args.height).start()
         else:
             video_capture = WebcamVideoStream(
                 src=args.video_source, width=args.width, height=args.height).start()
