@@ -192,6 +192,9 @@ class Ui_HandGestureRecognitionSystem(object):
         self.details_cb.setGeometry(QtCore.QRect(320, 320, 161, 17))
         self.details_cb.setChecked(True)
         self.details_cb.setObjectName("details_cb")
+        self.on_off_image = QtWidgets.QLabel(self.centralwidget)
+        self.on_off_image.setGeometry(QtCore.QRect(200, 300, 21, 21))
+        self.on_off_image.setObjectName("on_off_image")
         HandGestureRecognitionSystem.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(HandGestureRecognitionSystem)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 810, 21))
@@ -250,5 +253,6 @@ class Ui_HandGestureRecognitionSystem(object):
         self.ver_segm_lbl_8.setText(_translate("HandGestureRecognitionSystem", "ДЛЯ МОНИТОРИНГА ПО ГРУППАМ, УДАЛИТЬ СРЕДНЮЮ ТОЧНОСТЬ, СДЕЛАТЬ МОНИТОРИНГ ПОСТОЯННЫМ, ДОБАВИТЬ ВОЗМОЖНОСТЬ РЕДАКТИРОВАНИЯ(Порог мониторинга для распознавания), НАДО ПОКАЗАТЬ ЗАЧЕМ ЭТО."))
         self.thr_lbl_segm_5.setText(_translate("HandGestureRecognitionSystem", "Сделать Resize при IP Cam"))
         self.details_cb.setText(_translate("HandGestureRecognitionSystem", "Детали классификации"))
+        self.on_off_image.setText(_translate("HandGestureRecognitionSystem", "Image"))
 
 

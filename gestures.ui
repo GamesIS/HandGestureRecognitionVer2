@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>268</width>
+    <width>376</width>
     <height>336</height>
    </rect>
   </property>
@@ -70,6 +70,27 @@
    </property>
    <property name="text">
     <string>Сохранить</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="ver_segm_lbl_9">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>60</y>
+     <width>361</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>11</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>Пример Жеста</string>
+   </property>
+   <property name="wordWrap">
+    <bool>true</bool>
    </property>
   </widget>
  </widget>

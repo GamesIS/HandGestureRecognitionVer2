@@ -17,9 +17,10 @@ frame_processed = 0
 score_thresh = 0.27
 window_name = 'Camera'
 
+CLASS_NO_GESTURE = "Нет жеста"
 
 def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_processed, settings_q,
-           version_segm_cnn):
+           version_segm_cnn, poses, enable_gesture, job_time):
     print(">> loading frozen model for worker")
     detection_graph, sess = detector_utils.load_inference_graph(version_segm_cnn)
     sess = tf.Session(graph=detection_graph)
@@ -27,7 +28,14 @@ def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_
     print(">> loading keras model for worker")
     model, classification_graph, session = classifier.load_KerasGraph("cnn/models/hand_poses_wGarbage_14.h5")
 
+    monitor = mon.Monitor(False, enable_gesture, 15)
+    last_start_time = -1
     while True:
+        if last_start_time != -1:
+            curTime = int(time.time())
+            if curTime - last_start_time >= job_time:
+                last_start_time = -1
+                monitor.last_start_time = -1
         frame = input_q.get()
         if (frame is not None):
 
@@ -45,7 +53,11 @@ def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_
 
             if res is not None:
                 class_res = classifier.classify(model, classification_graph, session, res)
-                inferences_q.put(class_res)
+                if enable_gesture != CLASS_NO_GESTURE and last_start_time == -1:
+                    last_start_time = monitor.monitoring(names=poses, predictions=class_res, threshold=0.7, main=None)
+                    res = None
+                else:
+                    inferences_q.put(class_res)
 
             cropped_output_q.put(res)
             output_q.put(frame)
@@ -74,7 +86,7 @@ class HandPose:
     main = None
     recognition_started = False
     settings = Settings()
-    version_segm_cnn = ""
+    version_segm_cnn = "Нет жеста"
 
     def __init__(self, mainController):
         self.main = mainController
@@ -106,12 +118,13 @@ class HandPose:
 
         pool = Pool(num_workers, worker,
                     (input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_processed, settings_q,
-                     self.version_segm_cnn))
+                     self.version_segm_cnn, poses, self.main.class_gest_cb.currentText(), 10))
 
         start_time_millis = int(round(time.time() * 1000))
         fps = 0
         index = 0
 
+        monitor = mon.Monitor(True, None, 30)
         cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
 
         while cv2.getWindowProperty(window_name, 0) >= 0 and self.recognition_started:
@@ -150,10 +163,10 @@ class HandPose:
             if inferences is not None:
                 if self.settings.detailsISEnabled:
                     gui.drawInferences(inferences, poses)
-                mon.monitoring(names=poses, predictions=inferences, threshold=0.7, main=self.main)
                 if self.main.cb_json.isChecked():
                     json_sender.send_json(inferences, poses, self.main.ip_host.toPlainText(),
                                           int(self.main.port_host.toPlainText()))
+                monitor.monitoring(names=poses, predictions=inferences, threshold=0.7, main=self.main)
 
             if cropped_output is not None:
                 if self.settings.detailsISEnabled:

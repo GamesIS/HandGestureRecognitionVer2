@@ -6,6 +6,7 @@ from multiprocessing import Queue
 
 import cyrtranslit
 from PyQt5 import QtWidgets, QtGui, QtCore
+from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
 import AddPose
@@ -85,6 +86,11 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
 
         self.details_cb.clicked.connect(self.destroy_cv2)
         self.fps_enabled.clicked.connect(self.power_fps)
+
+        pixmap = QPixmap('off_led.png')
+        #pixmap.scaled(self.on_off_image.width(), self.on_off_image.height())
+        self.on_off_image.setPixmap(pixmap)
+        self.on_off_image.setScaledContents(True)
 
     def power_fps(self):
         self.recognition.power_fps(self.fps_enabled.isChecked())

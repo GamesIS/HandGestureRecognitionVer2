@@ -502,30 +502,6 @@ p, li { white-space: pre-wrap; }
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QLabel" name="thr_lbl_segm_4">
-    <property name="geometry">
-     <rect>
-      <x>560</x>
-      <y>220</y>
-      <width>231</width>
-      <height>121</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="lineWidth">
-     <number>1</number>
-    </property>
-    <property name="text">
-     <string>Выбор жеста включающего общее распознавание</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QPushButton" name="open_list_gestures">
     <property name="geometry">
      <rect>
@@ -640,6 +616,19 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="checked">
      <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="on_off_image">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>300</y>
+      <width>21</width>
+      <height>21</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Image</string>
     </property>
    </widget>
   </widget>
