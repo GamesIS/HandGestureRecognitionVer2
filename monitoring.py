@@ -13,6 +13,8 @@ class Monitor:
         self.last_start_time = -1
 
     def monitoring(self, predictions, threshold, names, main):
+        if self.general:
+            self.last_start_time = -1
         m_pred = self.get_max_predictions(predictions, names)
         if m_pred.prediction > threshold:
             if self.gesture_q.full():
@@ -57,6 +59,7 @@ class Monitor:
             if finish_gesture != None:
                 self.gesture_q.queue.clear()
                 self.gesture_l.clear()
+                self.last_start_time = 0
             if main.monitor != None:
                 main.monitor.fill_table(count_names, finish_gesture)
         else:

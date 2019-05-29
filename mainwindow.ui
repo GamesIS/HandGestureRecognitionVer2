@@ -121,11 +121,11 @@ p, li { white-space: pre-wrap; }
       <x>250</x>
       <y>10</y>
       <width>281</width>
-      <height>301</height>
+      <height>261</height>
      </rect>
     </property>
     <property name="title">
-     <string>Настройки отслеживания</string>
+     <string>Преднастройка сегментирующей NN</string>
     </property>
     <widget class="QLabel" name="cnt_hand_lbl">
      <property name="geometry">
@@ -189,44 +189,6 @@ p, li { white-space: pre-wrap; }
      </property>
      <property name="wordWrap">
       <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="thr_lbl_class">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>230</y>
-       <width>251</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="lineWidth">
-      <number>1</number>
-     </property>
-     <property name="text">
-      <string>Порог чувствительности классифицирующей нейронной сети:</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QSlider" name="trsh_class_sldr">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>270</y>
-       <width>221</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="value">
-      <number>27</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
      </property>
     </widget>
     <widget class="QLabel" name="ver_segm_lbl">
@@ -303,29 +265,19 @@ p, li { white-space: pre-wrap; }
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLabel" name="thr_lbl_class_val">
+    <widget class="QCheckBox" name="fps_enabled">
      <property name="geometry">
       <rect>
-       <x>240</x>
-       <y>260</y>
-       <width>31</width>
-       <height>31</height>
+       <x>60</x>
+       <y>240</y>
+       <width>161</width>
+       <height>17</height>
       </rect>
      </property>
-     <property name="font">
-      <font>
-       <pointsize>10</pointsize>
-       <weight>75</weight>
-       <bold>true</bold>
-      </font>
-     </property>
-     <property name="lineWidth">
-      <number>1</number>
-     </property>
      <property name="text">
-      <string>0.27</string>
+      <string>Показывать счетчик FPS</string>
      </property>
-     <property name="wordWrap">
+     <property name="checked">
       <bool>true</bool>
      </property>
     </widget>
@@ -444,45 +396,11 @@ p, li { white-space: pre-wrap; }
      <string>Сбросить все настройки</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="sett_class_cnn">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>240</y>
-      <width>231</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>8</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Редактирование классифицирующей NN</string>
-    </property>
-   </widget>
-   <widget class="QCheckBox" name="fps_enabled">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>340</y>
-      <width>161</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Показывать счетчик FPS</string>
-    </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QLabel" name="thr_lbl_segm_3">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>500</y>
+      <x>460</x>
+      <y>400</y>
       <width>281</width>
       <height>131</height>
      </rect>
@@ -515,48 +433,6 @@ p, li { white-space: pre-wrap; }
      <string>Открыть список жестов</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="class_gest_cb">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>190</y>
-      <width>111</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="ver_segm_lbl_6">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>180</y>
-      <width>111</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Жест отвечающий за активацию системы классификации</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="ver_segm_lbl_7">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>510</y>
-      <width>181</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QLabel" name="ver_segm_lbl_8">
     <property name="geometry">
      <rect>
@@ -581,8 +457,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QLabel" name="thr_lbl_segm_5">
     <property name="geometry">
      <rect>
-      <x>80</x>
-      <y>400</y>
+      <x>550</x>
+      <y>210</y>
       <width>231</width>
       <height>121</height>
      </rect>
@@ -602,34 +478,187 @@ p, li { white-space: pre-wrap; }
      <bool>true</bool>
     </property>
    </widget>
-   <widget class="QCheckBox" name="details_cb">
+   <widget class="QGroupBox" name="mode_detection_2">
     <property name="geometry">
      <rect>
-      <x>320</x>
-      <y>320</y>
-      <width>161</width>
-      <height>17</height>
+      <x>60</x>
+      <y>290</y>
+      <width>311</width>
+      <height>211</height>
      </rect>
     </property>
-    <property name="text">
-     <string>Детали классификации</string>
+    <property name="title">
+     <string>Преднастройки классифицирующей NN</string>
     </property>
-    <property name="checked">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="on_off_image">
-    <property name="geometry">
-     <rect>
-      <x>200</x>
-      <y>300</y>
-      <width>21</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Image</string>
-    </property>
+    <widget class="QLabel" name="ver_segm_lbl_9">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>111</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Активность  NN</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="ver_segm_lbl_7">
+     <property name="geometry">
+      <rect>
+       <x>80</x>
+       <y>150</y>
+       <width>181</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="class_gest_cb">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>30</y>
+       <width>111</width>
+       <height>22</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="on_off_image">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>60</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Image</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="sett_class_cnn">
+     <property name="geometry">
+      <rect>
+       <x>70</x>
+       <y>170</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>8</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Редактирование NN</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="ver_segm_lbl_6">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>211</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Жест отвечающий за активацию системы классификации</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="details_cb">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>161</width>
+       <height>17</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Детали классификации</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="thr_lbl_class_val">
+     <property name="geometry">
+      <rect>
+       <x>270</x>
+       <y>130</y>
+       <width>31</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+       <weight>75</weight>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="text">
+      <string>0.27</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="thr_lbl_class">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>100</y>
+       <width>261</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="text">
+      <string>Порог чувствительности классифицирующей нейронной сети:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QSlider" name="trsh_class_sldr">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>130</y>
+       <width>241</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="value">
+      <number>27</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

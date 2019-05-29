@@ -92,6 +92,16 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         self.on_off_image.setPixmap(pixmap)
         self.on_off_image.setScaledContents(True)
 
+    def change_en_cnn(self, bool):
+        if bool:
+            pixmap = QPixmap('on_led.png')
+            self.on_off_image.setPixmap(pixmap)
+            self.on_off_image.setScaledContents(True)
+        else:
+            pixmap = QPixmap('off_led.png')
+            self.on_off_image.setPixmap(pixmap)
+            self.on_off_image.setScaledContents(True)
+
     def power_fps(self):
         self.recognition.power_fps(self.fps_enabled.isChecked())
 
@@ -191,10 +201,13 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         if self.recognition.recognition_started:
             self.recognition.recognition_started = False
             self.startDetection.setText("Включить отслеживание")
+            self.change_en_cnn(False)
+            self.class_gest_cb.setEnabled(True)
             if self.cb_json.isChecked():
                 self.ip_host.setEnabled(True)
                 self.port_host.setEnabled(True)
         else:
+            self.class_gest_cb.setEnabled(False)
             self.ip_host.setEnabled(False)
             self.port_host.setEnabled(False)
             self.startDetection.setText("Выключить отслеживание")
