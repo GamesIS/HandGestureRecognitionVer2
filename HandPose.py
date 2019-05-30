@@ -148,7 +148,7 @@ class HandPose:
         last_sett_o = False
         finded_gest = False
 
-        monitor = mon.Monitor(True, None, 30)
+        monitor = mon.Monitor(True, None, 15)
         cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
 
         while cv2.getWindowProperty(window_name, 0) >= 0 and self.recognition_started:

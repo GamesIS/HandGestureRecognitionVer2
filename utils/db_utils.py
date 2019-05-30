@@ -38,6 +38,25 @@ def load_json_poses():
         poses.gestures = sorting_poses(poses.gestures)
         return poses
 
+def get_used_group(groups, gesture_group, poses):
+    result = []
+    index = 0
+    for name in poses:
+        group = groups[gesture_group[index]]
+        if group not in result:
+            result.append(group)
+        index += 1
+    return result
+
+def get_new_gest_group(groups, unicues_groups, poses, gesture_group):
+    index = 0
+    for name in poses:
+        t = gesture_group[index]
+        d = groups[t]
+        gesture_group[index] = unicues_groups.index(d)
+        index += 1
+    return gesture_group
+
 def save_json_poses(object):
     with open(POSES_JSON, 'w', encoding='utf-8') as json_file:
         data = json.dumps(object.__dict__, ensure_ascii=False)
@@ -48,4 +67,6 @@ class Poses:
     def __init__(self, gestures, group, gestures_group):
         self.gestures = gestures
         self.group = group
-        self.gestures_group = gestures_group
+        self.unicues_gesture = get_used_group(group, gestures_group, gestures)
+        self.gestures_group = get_new_gest_group(group, self.unicues_gesture, gestures, gestures_group)
+        self.group = self.unicues_gesture

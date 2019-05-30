@@ -2,7 +2,6 @@ import ctypes
 import os
 import re
 import sys  # sys нужен для передачи argv в QApplication
-from multiprocessing import Queue
 
 import cyrtranslit
 from PyQt5 import QtWidgets, QtGui, QtCore
@@ -11,12 +10,10 @@ from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox
 
 import AddPose
 import HandPose as rec_class
+import class_cnn
 import design  # Это наш конвертированный файл дизайна
 import gestures
-import gui
-import class_cnn
 import gui_monitoring
-import monitoring as mon
 from cnn import cnn
 from utils import db_utils as db_utils
 
@@ -40,6 +37,8 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
     ip_valid = True
     port_valid = True
     ip_cam_valid = True
+
+    reset_gesture_mon = False
 
     def __init__(self):
         # Это здесь нужно для доступа к переменным, методам
@@ -67,7 +66,7 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         self.rb_segm_1.clicked.connect(self.change_segm_cnn)
         self.rb_segm_2.clicked.connect(self.change_segm_cnn)
 
-        self.countHandsCB.addItems(["1 рука", "2 руки", "10 рук(демо)"])
+        self.countHandsCB.addItems(["1 рука", "2 руки(демо)", "10 рук(демо)"])
         self.countHandsCB.activated.connect(self.count_hands_changed)
 
         self.gestures_win = None
@@ -88,7 +87,6 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         self.fps_enabled.clicked.connect(self.power_fps)
 
         pixmap = QPixmap('off_led.png')
-        #pixmap.scaled(self.on_off_image.width(), self.on_off_image.height())
         self.on_off_image.setPixmap(pixmap)
         self.on_off_image.setScaledContents(True)
 
@@ -196,7 +194,6 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
             return True
         return False
 
-
     def start_detection(self):
         if self.recognition.recognition_started:
             self.recognition.recognition_started = False
@@ -260,6 +257,7 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
             self.monitor.show()
             # self.monitor.update_gestures_cb()
 
+
 class GesturesWin(QtWidgets.QMainWindow):
     main = None
 
@@ -301,7 +299,7 @@ class GesturesWin(QtWidgets.QMainWindow):
 
             self.ui.gesture_table.setItem(row, 0, one_cellinfo)
             self.ui.gesture_table.setItem(row, 1, two_cellinfo)
-            #self.ui.gesture_table.setCellWidget(row, 1, combo)
+            # self.ui.gesture_table.setCellWidget(row, 1, combo)
             row += 1
 
     def save_gesture_json(self):
@@ -357,6 +355,7 @@ class GesturesWin(QtWidgets.QMainWindow):
             gestures.append(self.ui.gesture_table.item(row, 0).text())
         return gestures
 
+
 class ClassCNN(QtWidgets.QMainWindow):
     main = None
 
@@ -368,7 +367,7 @@ class ClassCNN(QtWidgets.QMainWindow):
         self.update_gestures_cb()
         self.ui.add_pose.clicked.connect(self.add_pose)
         self.ui.start_training.clicked.connect(self.start_training_cnn)
-    
+
     def start_training_cnn(self):
         cnn.train(int(self.ui.count_epoch.toPlainText()))
 
@@ -387,14 +386,9 @@ class ClassCNN(QtWidgets.QMainWindow):
             one_cellinfo.setFlags(QtCore.Qt.ItemIsEnabled)
             two_cellinfo.setFlags(QtCore.Qt.ItemIsEnabled)
 
-            # combo = QtWidgets.QComboBox()
-            # combo.addItem("Изучить")
-            # combo.addItem("Забыть")
-            # combo.addItem("Удалить")
-
             self.ui.gest_table.setItem(row, 0, one_cellinfo)
             self.ui.gest_table.setItem(row, 1, two_cellinfo)
-            #self.ui.gesture_table.setCellWidget(row, 1, combo)
+
             row += 1
         self.ui.gest_table.resizeColumnsToContents()
 
@@ -403,11 +397,12 @@ class ClassCNN(QtWidgets.QMainWindow):
         self.init_table()
         self.ui.gestures_cb.addItems(self.main.Gestures.gestures)
 
+
 class Monitor(QtWidgets.QMainWindow):
     main = None
 
-    abs_list = []
-    avg_list = []
+    abs_general_list = []
+    abs_group_list = []
 
     def __init__(self, parent):
         QtWidgets.QMainWindow.__init__(self, parent)
@@ -415,25 +410,26 @@ class Monitor(QtWidgets.QMainWindow):
         self.ui = gui_monitoring.Ui_monitoring_form()
         self.ui.setupUi(self)
         self.init_table()
+        self.ui.clear_btn_gest.clicked.connect(self.reset_gesture)
+
+    def reset_gesture(self):
+        self.main.reset_gesture_mon = True
+        self.last_general_colored_row = -1
+        self.last_group_colored_row = -1
+        self.abs_general_list = []
+        self.init_table()
+
 
     def init_table(self):
+        self.ui.overall_gest.setText("Всего распознано жестов: ")
+
         row = 0
-        self.ui.monitoring_table.setRowCount(len(self.main.Gestures.gestures))
-        for gesture in self.main.Gestures.gestures:
-            one_cellinfo = QTableWidgetItem(gesture)
-            avg = 0
+        self.ui.general_table_gest.setRowCount(len(self.main.Gestures.gestures))
+        for group in self.main.Gestures.gestures:
+            one_cellinfo = QTableWidgetItem(group)
             abs = 0
 
-            self.ui.monitoring_table.setItem(row, 0, one_cellinfo)
-
-            # Создаем QProgressBar
-            avg_progr = QtWidgets.QProgressBar()
-            avg_progr.setMinimum(0)
-            avg_progr.setMaximum(100)
-
-            # Формат вывода: 10.50%
-            avg_progr.setValue(avg)
-            avg_progr.setFormat('{0:.2f}%'.format(avg))
+            self.ui.general_table_gest.setItem(row, 0, one_cellinfo)
 
             # Создаем QProgressBar
             abs_progr = QtWidgets.QProgressBar()
@@ -444,38 +440,116 @@ class Monitor(QtWidgets.QMainWindow):
             abs_progr.setValue(abs)
             abs_progr.setFormat('{0:.2f}%'.format(abs))
 
-            self.ui.monitoring_table.setCellWidget(row, 1, avg_progr)
-            self.ui.monitoring_table.setCellWidget(row, 2, abs_progr)
+            self.ui.general_table_gest.setCellWidget(row, 1, abs_progr)
 
-            self.abs_list.append(abs_progr)
-            self.avg_list.append(avg_progr)
+            self.abs_general_list.append(abs_progr)
 
             row += 1
 
-            self.ui.monitoring_table.resizeColumnsToContents()
-
-    def fill_table(self, finish_predictions, last_gesture):
+        self.ui.general_table_gest.resizeColumnsToContents()
+            ########################################################
         row = 0
-        self.ui.monitoring_table.setRowCount(len(self.main.Gestures.gestures))
-        for cnt_name in finish_predictions:
-            one_cellinfo = QTableWidgetItem(cnt_name.name)
-            avg = cnt_name.avg_pred * 100
-            abs = cnt_name.abs_ver * 100
+        self.ui.group_table.setRowCount(len(self.main.Gestures.group))
+        for group in self.main.Gestures.group:
+            one_cellinfo = QTableWidgetItem(group)
+            if group == "":
+                one_cellinfo = QTableWidgetItem("Нет группы")
+            abs = 0
 
-            self.avg_list[row].setValue(avg)
-            self.avg_list[row].setFormat('{0:.2f}%'.format(avg))
+            self.ui.group_table.setItem(row, 0, one_cellinfo)
 
-            self.abs_list[row].setValue(abs)
-            self.abs_list[row].setFormat('{0:.2f}%'.format(abs))
+            # Создаем QProgressBar
+            abs_progr = QtWidgets.QProgressBar()
+            abs_progr.setMinimum(0)
+            abs_progr.setMaximum(100)
 
-            self.ui.monitoring_table.setItem(row, 0, one_cellinfo)#TODO может тоже просто значение менять
+            # Формат вывода: 10.50%
+            abs_progr.setValue(abs)
+            abs_progr.setFormat('{0:.2f}%'.format(abs))
+
+            self.ui.group_table.setCellWidget(row, 1, abs_progr)
+
+            self.abs_group_list.append(abs_progr)
 
             row += 1
 
-        if last_gesture != None:
-            self.ui.finish_gest.setText("Распознан жест: " + last_gesture.name)
+        self.ui.group_table.resizeColumnsToContents()
 
-        self.ui.monitoring_table.resizeColumnsToContents()
+    last_general_colored_row = -1
+    last_group_colored_row = -1
+    white = QtGui.QColor(255, 255, 255)
+    green = QtGui.QColor(0, 255, 0)
+
+    def fill_general_table(self, names, count_gestures, overall_count, finish_gesture):
+        row = 0
+        for name in names:
+            abs = 0
+            if overall_count != 0:
+                abs = (count_gestures[row] / overall_count) * 100
+
+            self.abs_general_list[row].setValue(abs)
+            self.abs_general_list[row].setFormat('{0:.2f}%'.format(abs))
+
+            if finish_gesture.name == name:
+                if self.last_general_colored_row != row:
+                    self.ui.general_table_gest.item(row, 0).setBackground(self.green)
+                    if self.last_general_colored_row != -1:
+                        self.ui.general_table_gest.item(self.last_general_colored_row, 0).setBackground(
+                            self.white)
+                    self.last_general_colored_row = row
+
+            row += 1
+        self.ui.overall_gest.setText("Всего распознано жестов: " + str(overall_count))
+        self.ui.general_table_gest.resizeColumnsToContents()
+
+    def setColortoRow(self, table, rowIndex, color):
+        for j in range(table.columnCount()):
+            table.item(rowIndex, j).setBackground(color)
+
+    start_color = 50
+    end_color = 255
+    def calc_color(self, min, max, count):
+        x = (count - min) / (max - min)
+        color = x * self.start_color + (x - 1) * self.end_color
+
+        return QtGui.QColor(color, 0, 0)
+
+
+    def fill_group_table(self, groups, count_groups, overall_count, finish_group):
+        min = overall_count
+        max = 0
+        for val in count_groups:
+            if val > max:
+                max = val
+            if val < min:
+                min = val
+
+        row = 0
+        for name in groups:
+
+            abs = 0
+            if overall_count != 0:
+                abs = (count_groups[row] / overall_count) * 100
+
+            self.abs_group_list[row].setValue(abs)
+            self.abs_group_list[row].setFormat('{0:.2f}%'.format(abs))
+
+            if finish_group == name:
+                if self.last_group_colored_row != row:
+                    self.ui.group_table.item(row, 0).setBackground(self.green)
+                    if self.last_group_colored_row != -1:
+                        self.ui.group_table.item(self.last_group_colored_row, 0).setBackground(
+                            self.white)
+                    self.last_group_colored_row = row
+
+            if finish_group == name and overall_count > 10 and name != "":
+                if self.last_group_colored_row != row:
+                    self.setColortoRow(self.ui.group_table, row, self.calc_color(min, max, count_groups[row]))
+                    self.ui.group_table.item(row, 0).setBackground(self.green)
+
+            row += 1
+        self.ui.group_table.resizeColumnsToContents()
+
 
 def get_count_examples(pose):
     pose = cyrtranslit.to_latin(pose, 'ru')
@@ -487,6 +561,7 @@ def get_count_examples(pose):
         count = count + len(files)
     return count
 
+
 def rename_folders(oldName, newName):
     oldName = cyrtranslit.to_latin(oldName, 'ru')
     newName = cyrtranslit.to_latin(newName, 'ru')
@@ -497,8 +572,9 @@ def rename_folders(oldName, newName):
         for sub in subdirs:
             print(sub)
             os.rename(oldPath + sub, oldPath + newName + "_" + str(index))
-            index = index+1
+            index = index + 1
         os.rename(oldPath, 'Poses/' + newName + '/')
+
 
 def show_error(message, title):
     msg = QMessageBox()
@@ -506,6 +582,7 @@ def show_error(message, title):
     msg.setText(message)
     msg.setWindowTitle(title)
     msg.exec_()
+
 
 def main():
     app = QtWidgets.QApplication(sys.argv)  # Новый экземпляр QApplication

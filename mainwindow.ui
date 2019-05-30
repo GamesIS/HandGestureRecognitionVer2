@@ -396,62 +396,17 @@ p, li { white-space: pre-wrap; }
      <string>Сбросить все настройки</string>
     </property>
    </widget>
-   <widget class="QLabel" name="thr_lbl_segm_3">
-    <property name="geometry">
-     <rect>
-      <x>460</x>
-      <y>400</y>
-      <width>281</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="lineWidth">
-     <number>1</number>
-    </property>
-    <property name="text">
-     <string>ТОЛЬКО ПРИ ПРЕВЫШЕНИИ БУДЕТ ОТПРАВЛЯТЬСЯ JSON и ОТОБРАЖАТЬСЯ КАК РАСПОЗНАННЫЙ ЖЕСТ</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QPushButton" name="open_list_gestures">
     <property name="geometry">
      <rect>
-      <x>630</x>
+      <x>610</x>
       <y>320</y>
-      <width>151</width>
+      <width>171</width>
       <height>41</height>
      </rect>
     </property>
     <property name="text">
-     <string>Открыть список жестов</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="ver_segm_lbl_8">
-    <property name="geometry">
-     <rect>
-      <x>430</x>
-      <y>520</y>
-      <width>361</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>11</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>ДЛЯ МОНИТОРИНГА ПО ГРУППАМ, УДАЛИТЬ СРЕДНЮЮ ТОЧНОСТЬ, СДЕЛАТЬ МОНИТОРИНГ ПОСТОЯННЫМ, ДОБАВИТЬ ВОЗМОЖНОСТЬ РЕДАКТИРОВАНИЯ(Порог мониторинга для распознавания), НАДО ПОКАЗАТЬ ЗАЧЕМ ЭТО.</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
+     <string>Редактировать список жестов</string>
     </property>
    </widget>
    <widget class="QLabel" name="thr_lbl_segm_5">
@@ -459,8 +414,8 @@ p, li { white-space: pre-wrap; }
      <rect>
       <x>550</x>
       <y>210</y>
-      <width>231</width>
-      <height>121</height>
+      <width>201</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="font">
@@ -481,8 +436,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QGroupBox" name="mode_detection_2">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>290</y>
+      <x>40</x>
+      <y>280</y>
       <width>311</width>
       <height>211</height>
      </rect>
@@ -494,7 +449,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>60</y>
+       <y>120</y>
        <width>111</width>
        <height>21</height>
       </rect>
@@ -526,7 +481,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>190</x>
-       <y>30</y>
+       <y>20</y>
        <width>111</width>
        <height>22</height>
       </rect>
@@ -536,7 +491,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>190</x>
-       <y>60</y>
+       <y>120</y>
        <width>21</width>
        <height>21</height>
       </rect>
@@ -560,7 +515,7 @@ p, li { white-space: pre-wrap; }
       </font>
      </property>
      <property name="text">
-      <string>Редактирование NN</string>
+      <string>Редактировать NN</string>
      </property>
     </widget>
     <widget class="QLabel" name="ver_segm_lbl_6">
@@ -568,8 +523,8 @@ p, li { white-space: pre-wrap; }
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>211</width>
-       <height>61</height>
+       <width>181</width>
+       <height>41</height>
       </rect>
      </property>
      <property name="text">
@@ -583,7 +538,7 @@ p, li { white-space: pre-wrap; }
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>80</y>
+       <y>140</y>
        <width>161</width>
        <height>17</height>
       </rect>
@@ -595,11 +550,52 @@ p, li { white-space: pre-wrap; }
       <bool>true</bool>
      </property>
     </widget>
+    <widget class="QSlider" name="trsh_class_sldr">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>80</y>
+       <width>241</width>
+       <height>22</height>
+      </rect>
+     </property>
+     <property name="minimum">
+      <number>5</number>
+     </property>
+     <property name="maximum">
+      <number>30</number>
+     </property>
+     <property name="value">
+      <number>15</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+    <widget class="QLabel" name="thr_lbl_class">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>50</y>
+       <width>261</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="lineWidth">
+      <number>1</number>
+     </property>
+     <property name="text">
+      <string>Количество фреймов при котором жест считается распознанным:</string>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
     <widget class="QLabel" name="thr_lbl_class_val">
      <property name="geometry">
       <rect>
-       <x>270</x>
-       <y>130</y>
+       <x>260</x>
+       <y>70</y>
        <width>31</width>
        <height>31</height>
       </rect>
@@ -615,50 +611,108 @@ p, li { white-space: pre-wrap; }
       <number>1</number>
      </property>
      <property name="text">
-      <string>0.27</string>
+      <string>15</string>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QLabel" name="thr_lbl_class">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>100</y>
-       <width>261</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="lineWidth">
-      <number>1</number>
-     </property>
-     <property name="text">
-      <string>Порог чувствительности классифицирующей нейронной сети:</string>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QSlider" name="trsh_class_sldr">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>130</y>
-       <width>241</width>
-       <height>22</height>
-      </rect>
-     </property>
-     <property name="minimum">
-      <number>1</number>
-     </property>
-     <property name="value">
-      <number>27</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-    </widget>
+   </widget>
+   <widget class="QLabel" name="thr_lbl_segm_7">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>500</y>
+      <width>251</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="lineWidth">
+     <number>1</number>
+    </property>
+    <property name="text">
+     <string>После начала процесса обучения/добавления позы вывести сообщение о начале и в конце также. Сделать их в новом потоке</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="thr_lbl_segm_8">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>560</y>
+      <width>231</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="lineWidth">
+     <number>1</number>
+    </property>
+    <property name="text">
+     <string>Автоподхват вновь обученной модели</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="thr_lbl_segm_9">
+    <property name="geometry">
+     <rect>
+      <x>470</x>
+      <y>500</y>
+      <width>251</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="lineWidth">
+     <number>1</number>
+    </property>
+    <property name="text">
+     <string>оповещение о требовании рестарта</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="thr_lbl_segm_10">
+    <property name="geometry">
+     <rect>
+      <x>340</x>
+      <y>310</y>
+      <width>271</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="lineWidth">
+     <number>1</number>
+    </property>
+    <property name="text">
+     <string>в начале возможно неправильно рассчитывается gesture group. Color починить и Очистку</string>
+    </property>
+    <property name="wordWrap">
+     <bool>true</bool>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
