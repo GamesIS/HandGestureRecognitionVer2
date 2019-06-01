@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>810</width>
-    <height>671</height>
+    <width>607</width>
+    <height>612</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,8 +17,8 @@
    <widget class="QPushButton" name="startDetection">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>120</y>
+      <x>180</x>
+      <y>520</y>
       <width>241</width>
       <height>51</height>
      </rect>
@@ -40,9 +40,9 @@
    <widget class="QPushButton" name="open_monitor_btn">
     <property name="geometry">
      <rect>
-      <x>630</x>
-      <y>370</y>
-      <width>151</width>
+      <x>370</x>
+      <y>350</y>
+      <width>171</width>
       <height>41</height>
      </rect>
     </property>
@@ -53,9 +53,9 @@
    <widget class="QGroupBox" name="mode_detection">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>10</y>
-      <width>241</width>
+      <x>10</x>
+      <y>410</y>
+      <width>271</width>
       <height>101</height>
      </rect>
     </property>
@@ -86,7 +86,7 @@
       <rect>
        <x>10</x>
        <y>60</y>
-       <width>221</width>
+       <width>251</width>
        <height>31</height>
       </rect>
      </property>
@@ -118,8 +118,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QGroupBox" name="settings_detection_gb">
     <property name="geometry">
      <rect>
-      <x>250</x>
-      <y>10</y>
+      <x>0</x>
+      <y>0</y>
       <width>281</width>
       <height>261</height>
      </rect>
@@ -285,9 +285,9 @@ p, li { white-space: pre-wrap; }
    <widget class="QGroupBox" name="send_json_group">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>10</y>
-      <width>241</width>
+      <x>10</x>
+      <y>260</y>
+      <width>271</width>
       <height>141</height>
      </rect>
     </property>
@@ -318,7 +318,7 @@ p, li { white-space: pre-wrap; }
       <rect>
        <x>70</x>
        <y>50</y>
-       <width>161</width>
+       <width>191</width>
        <height>31</height>
       </rect>
      </property>
@@ -338,7 +338,7 @@ p, li { white-space: pre-wrap; }
       <rect>
        <x>70</x>
        <y>100</y>
-       <width>161</width>
+       <width>191</width>
        <height>31</height>
       </rect>
      </property>
@@ -386,9 +386,9 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="startDetection_5">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>160</y>
-      <width>241</width>
+      <x>370</x>
+      <y>400</y>
+      <width>171</width>
       <height>41</height>
      </rect>
     </property>
@@ -399,8 +399,8 @@ p, li { white-space: pre-wrap; }
    <widget class="QPushButton" name="open_list_gestures">
     <property name="geometry">
      <rect>
-      <x>610</x>
-      <y>320</y>
+      <x>370</x>
+      <y>300</y>
       <width>171</width>
       <height>41</height>
      </rect>
@@ -409,35 +409,11 @@ p, li { white-space: pre-wrap; }
      <string>Редактировать список жестов</string>
     </property>
    </widget>
-   <widget class="QLabel" name="thr_lbl_segm_5">
-    <property name="geometry">
-     <rect>
-      <x>550</x>
-      <y>210</y>
-      <width>201</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="lineWidth">
-     <number>1</number>
-    </property>
-    <property name="text">
-     <string>Сделать Resize при IP Cam</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="mode_detection_2">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>280</y>
+      <x>290</x>
+      <y>0</y>
       <width>311</width>
       <height>211</height>
      </rect>
@@ -618,109 +594,13 @@ p, li { white-space: pre-wrap; }
      </property>
     </widget>
    </widget>
-   <widget class="QLabel" name="thr_lbl_segm_7">
-    <property name="geometry">
-     <rect>
-      <x>130</x>
-      <y>500</y>
-      <width>251</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="lineWidth">
-     <number>1</number>
-    </property>
-    <property name="text">
-     <string>После начала процесса обучения/добавления позы вывести сообщение о начале и в конце также. Сделать их в новом потоке</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="thr_lbl_segm_8">
-    <property name="geometry">
-     <rect>
-      <x>560</x>
-      <y>560</y>
-      <width>231</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="lineWidth">
-     <number>1</number>
-    </property>
-    <property name="text">
-     <string>Автоподхват вновь обученной модели</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="thr_lbl_segm_9">
-    <property name="geometry">
-     <rect>
-      <x>470</x>
-      <y>500</y>
-      <width>251</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="lineWidth">
-     <number>1</number>
-    </property>
-    <property name="text">
-     <string>оповещение о требовании рестарта</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
-   <widget class="QLabel" name="thr_lbl_segm_10">
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>310</y>
-      <width>271</width>
-      <height>131</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>14</pointsize>
-     </font>
-    </property>
-    <property name="lineWidth">
-     <number>1</number>
-    </property>
-    <property name="text">
-     <string>в начале возможно неправильно рассчитывается gesture group. Color починить и Очистку</string>
-    </property>
-    <property name="wordWrap">
-     <bool>true</bool>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>810</width>
+     <width>607</width>
      <height>21</height>
     </rect>
    </property>

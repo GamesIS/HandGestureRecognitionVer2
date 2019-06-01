@@ -98,8 +98,8 @@ class Settings:
 
 
 class HandPose:
-    CAMERA_WIDTH = 300
-    CAMERA_HEIGHT = 200
+    CAMERA_WIDTH = 640
+    CAMERA_HEIGHT = 480
     CAMERA_INDEX = 0
     QUEUE_SIZE = 5
     main = None

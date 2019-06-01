@@ -12,7 +12,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_new_form(object):
     def setupUi(self, new_form):
         new_form.setObjectName("new_form")
-        new_form.resize(268, 336)
+        new_form.resize(269, 336)
         self.gesture_table = QtWidgets.QTableWidget(new_form)
         self.gesture_table.setGeometry(QtCore.QRect(10, 10, 251, 271))
         self.gesture_table.setSelectionMode(QtWidgets.QAbstractItemView.ExtendedSelection)
