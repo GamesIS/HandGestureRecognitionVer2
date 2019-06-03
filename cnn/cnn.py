@@ -5,9 +5,11 @@ import keras
 import matplotlib.pyplot as plt
 import numpy as np
 from keras import backend as K
+from keras.callbacks import ReduceLROnPlateau
 from keras.layers import Conv2D, MaxPooling2D
 from keras.layers import Dense, Dropout, Flatten
 from keras.models import Sequential
+from keras_preprocessing.image import ImageDataGenerator
 
 sys.path.insert(1, os.path.join(sys.path[0], '..'))
 import buildPosesDataset as dataset
@@ -17,6 +19,7 @@ def train(epochs):
     batch_size = 128
     learning_rate = 0.01
     model_name = "cnn/models/hand_poses_wGarbage_" + str(epochs) + ".h5"
+    every_epoch_path = "cnn/models/hand_poses_wGarbage_every.h5"
 
     # input image dimensions
     img_rows, img_cols = 28, 28
@@ -43,7 +46,7 @@ def train(epochs):
     y_train = keras.utils.to_categorical(y_train, num_classes)
     y_test = keras.utils.to_categorical(y_test, num_classes)
 
-    #model.load_weights("models/hand_poses_wGarbage_" + str(epochs) + ".h5")
+    # model.load_weights("models/hand_poses_wGarbage_" + str(epochs) + ".h5")
     ####### Model structure #######
     # model building
     model = Sequential()
@@ -72,12 +75,33 @@ def train(epochs):
                   optimizer=keras.optimizers.Adam(lr=learning_rate),
                   metrics=['accuracy'])
 
+    aug = ImageDataGenerator(horizontal_flip=True, rotation_range=3,
+                             width_shift_range=0.1,
+                             height_shift_range=0.1,
+                             zoom_range=0.1)
+
+    BS = 32
+
+    reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.2,
+                                  patience=5, min_lr=0.001)
+    check = keras.callbacks.ModelCheckpoint(every_epoch_path, monitor='val_loss', verbose=0, save_best_only=True,
+                                            save_weights_only=False, mode='auto', period=1)
+
+    # tensor_board = TensorBoard(log_dir='./Graph', histogram_freq=1, write_graph=True, write_images=True)
+
+    hist = model.fit_generator(
+        aug.flow(x_train, y_train, batch_size=batch_size),
+        validation_data=(x_test, y_test),
+        steps_per_epoch=len(x_train) // batch_size,
+        epochs=epochs, verbose=1,
+        callbacks=[reduce_lr, check])
+
     ####### TRAINING #######
-    hist = model.fit(x_train, y_train,
-                     batch_size=batch_size,
-                     epochs=epochs,
-                     verbose=2,
-                     validation_data=(x_test, y_test))
+    # hist = model.fit(x_train, y_train,
+    #                  batch_size=batch_size,
+    #                  epochs=epochs,
+    #                  verbose=1,
+    #                  validation_data=(x_test, y_test))
     # Evaluation
     score = model.evaluate(x_test, y_test, verbose=1)
 

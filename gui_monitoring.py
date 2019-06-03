@@ -84,7 +84,7 @@ class Ui_monitoring_form(object):
         self.clear_btn_gest.setObjectName("clear_btn_gest")
 
         self.retranslateUi(monitoring_form)
-        self.monitor_tabs.setCurrentIndex(0)
+        self.monitor_tabs.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(monitoring_form)
 
     def retranslateUi(self, monitoring_form):
@@ -93,12 +93,12 @@ class Ui_monitoring_form(object):
         item = self.general_table_gest.horizontalHeaderItem(0)
         item.setText(_translate("monitoring_form", "Название"))
         item = self.general_table_gest.horizontalHeaderItem(1)
-        item.setText(_translate("monitoring_form", "Вероятность"))
+        item.setText(_translate("monitoring_form", "Процент от всех"))
         self.monitor_tabs.setTabText(self.monitor_tabs.indexOf(self.tab_3), _translate("monitoring_form", "По жестам"))
         item = self.group_table.horizontalHeaderItem(0)
         item.setText(_translate("monitoring_form", "Название"))
         item = self.group_table.horizontalHeaderItem(1)
-        item.setText(_translate("monitoring_form", "Вероятность"))
+        item.setText(_translate("monitoring_form", "Процент от всех"))
         self.monitor_tabs.setTabText(self.monitor_tabs.indexOf(self.group_tab), _translate("monitoring_form", "По группам"))
         self.thr_lbl_class_val_2.setText(_translate("monitoring_form", "0.27"))
         self.thr_lbl_class_2.setText(_translate("monitoring_form", "Количество фреймов при котором жест считается распознанным:"))

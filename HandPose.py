@@ -26,7 +26,7 @@ def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_
     sess = tf.Session(graph=detection_graph)
 
     print(">> loading keras model for worker")
-    model, classification_graph, session = classifier.load_KerasGraph("cnn/models/hand_poses_wGarbage_14.h5")
+    model, classification_graph, session = classifier.load_KerasGraph("cnn/models/hand_poses_wGarbage_every.h5")
 
     monitor = mon.Monitor(False, enable_gesture, 15)
 
