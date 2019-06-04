@@ -232,7 +232,7 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
             self.address_cam.setEnabled(True)
 
     def closeEvent(self, event):
-        self.destory()
+        self.destroy()
 
     def open_gestures_win(self):
         if not self.gestures_win:
