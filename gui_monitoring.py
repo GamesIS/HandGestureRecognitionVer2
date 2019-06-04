@@ -12,8 +12,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_monitoring_form(object):
     def setupUi(self, monitoring_form):
         monitoring_form.setObjectName("monitoring_form")
-        monitoring_form.resize(294, 512)
+        monitoring_form.resize(294, 488)
         self.monitor_tabs = QtWidgets.QTabWidget(monitoring_form)
+        self.monitor_tabs.setEnabled(True)
         self.monitor_tabs.setGeometry(QtCore.QRect(10, 10, 281, 391))
         self.monitor_tabs.setToolTipDuration(-3)
         self.monitor_tabs.setObjectName("monitor_tabs")
@@ -33,6 +34,7 @@ class Ui_monitoring_form(object):
         self.general_table_gest.setHorizontalHeaderItem(1, item)
         self.monitor_tabs.addTab(self.tab_3, "")
         self.group_tab = QtWidgets.QWidget()
+        self.group_tab.setEnabled(True)
         self.group_tab.setObjectName("group_tab")
         self.group_table = QtWidgets.QTableWidget(self.group_tab)
         self.group_table.setEnabled(True)
@@ -80,11 +82,11 @@ class Ui_monitoring_form(object):
         self.overall_gest.setWordWrap(True)
         self.overall_gest.setObjectName("overall_gest")
         self.clear_btn_gest = QtWidgets.QPushButton(monitoring_form)
-        self.clear_btn_gest.setGeometry(QtCore.QRect(60, 480, 161, 31))
+        self.clear_btn_gest.setGeometry(QtCore.QRect(60, 450, 161, 31))
         self.clear_btn_gest.setObjectName("clear_btn_gest")
 
         self.retranslateUi(monitoring_form)
-        self.monitor_tabs.setCurrentIndex(1)
+        self.monitor_tabs.setCurrentIndex(0)
         QtCore.QMetaObject.connectSlotsByName(monitoring_form)
 
     def retranslateUi(self, monitoring_form):
@@ -93,12 +95,12 @@ class Ui_monitoring_form(object):
         item = self.general_table_gest.horizontalHeaderItem(0)
         item.setText(_translate("monitoring_form", "Название"))
         item = self.general_table_gest.horizontalHeaderItem(1)
-        item.setText(_translate("monitoring_form", "Процент от всех"))
+        item.setText(_translate("monitoring_form", "Концентрация"))
         self.monitor_tabs.setTabText(self.monitor_tabs.indexOf(self.tab_3), _translate("monitoring_form", "По жестам"))
         item = self.group_table.horizontalHeaderItem(0)
         item.setText(_translate("monitoring_form", "Название"))
         item = self.group_table.horizontalHeaderItem(1)
-        item.setText(_translate("monitoring_form", "Процент от всех"))
+        item.setText(_translate("monitoring_form", "Концентрация"))
         self.monitor_tabs.setTabText(self.monitor_tabs.indexOf(self.group_tab), _translate("monitoring_form", "По группам"))
         self.thr_lbl_class_val_2.setText(_translate("monitoring_form", "0.27"))
         self.thr_lbl_class_2.setText(_translate("monitoring_form", "Количество фреймов при котором жест считается распознанным:"))

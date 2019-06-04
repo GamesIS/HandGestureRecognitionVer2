@@ -7,13 +7,16 @@
     <x>0</x>
     <y>0</y>
     <width>294</width>
-    <height>512</height>
+    <height>488</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Мониторинг</string>
   </property>
   <widget class="QTabWidget" name="monitor_tabs">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -26,7 +29,7 @@
     <number>-3</number>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab_3">
     <attribute name="title">
@@ -64,12 +67,15 @@
      </column>
      <column>
       <property name="text">
-       <string>Процент от всех</string>
+       <string>Концентрация</string>
       </property>
      </column>
     </widget>
    </widget>
    <widget class="QWidget" name="group_tab">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <attribute name="title">
      <string>По группам</string>
     </attribute>
@@ -105,7 +111,7 @@
      </column>
      <column>
       <property name="text">
-       <string>Процент от всех</string>
+       <string>Концентрация</string>
       </property>
      </column>
     </widget>
@@ -206,7 +212,7 @@
    <property name="geometry">
     <rect>
      <x>60</x>
-     <y>480</y>
+     <y>450</y>
      <width>161</width>
      <height>31</height>
     </rect>
