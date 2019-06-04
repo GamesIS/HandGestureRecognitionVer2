@@ -57,6 +57,10 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         self.rb_ip_cam.toggled.connect(self.on_clicked_rb)
         self.trsh_segm_sldr.valueChanged.connect(lambda: self.value_change_thrsh(self.trsh_segm_sldr))
         self.trsh_class_sldr.valueChanged.connect(lambda: self.value_change_thrsh(self.trsh_class_sldr))
+
+        self.trsh_class_sldr.setHidden(True)
+        self.thr_lbl_class_val.setHidden(True)
+        self.thr_lbl_class.setHidden(True)
         self.cb_json.clicked.connect(self.set_def_ip_port)
 
         self.ip_host.textChanged.connect(self.value_change_ip)
@@ -360,13 +364,16 @@ class ClassCNN(QtWidgets.QMainWindow):
     main = None
 
     def __init__(self, parent):
-        QtWidgets.QMainWindow.__init__(self, parent)
-        self.main = parent
-        self.ui = class_cnn.Ui_class_cnn_form()
-        self.ui.setupUi(self)
-        self.update_gestures_cb()
-        self.ui.add_pose.clicked.connect(self.add_pose)
-        self.ui.start_training.clicked.connect(self.start_training_cnn)
+        try:
+            QtWidgets.QMainWindow.__init__(self, parent)
+            self.main = parent
+            self.ui = class_cnn.Ui_class_cnn_form()
+            self.ui.setupUi(self)
+            self.update_gestures_cb()
+            self.ui.add_pose.clicked.connect(self.add_pose)
+            self.ui.start_training.clicked.connect(self.start_training_cnn)
+        except Exception as e:
+            print(e)
 
     def start_training_cnn(self):
         cnn.train(int(self.ui.count_epoch.toPlainText()))
@@ -411,6 +418,9 @@ class Monitor(QtWidgets.QMainWindow):
         self.ui.setupUi(self)
         self.init_table()
         self.ui.clear_btn_gest.clicked.connect(self.reset_gesture)
+        self.ui.thr_lbl_class_2.setHidden(True)
+        self.ui.trsh_class_sldr_2.setHidden(True)
+        self.ui.thr_lbl_class_val_2.setHidden(True)
 
     def reset_gesture(self):
         self.main.reset_gesture_mon = True
@@ -555,6 +565,8 @@ def get_count_examples(pose):
     pose = cyrtranslit.to_latin(pose, 'ru')
     poses = os.listdir('Poses/')
     count = 0
+    if not os.path.exists('Poses/' + pose + '/'):
+        os.makedirs('Poses/' + pose + '/')
     subdirs = os.listdir('Poses/' + pose + '/')
     for subdir in subdirs:
         files = os.listdir('Poses/' + pose + '/' + subdir + '/')
