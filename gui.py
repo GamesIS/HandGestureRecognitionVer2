@@ -16,10 +16,10 @@ def drawInferences(values, names):
     fontpath = "simsun.ttf"
     font = ImageFont.truetype(fontpath, 26)
 
-    blank = np.zeros((600, 600, 3), np.uint8)
+    blank = np.zeros((600, 500, 3), np.uint8)
 
     for i in range(nb_classes):
-        if (values[i] > 0.7):
+        if (values[i] > 0.65):
             cv2.rectangle(blank, (left_margin, margin + int(margin * i)),
                           (left_margin + int(values[i] * 200), margin + thickness + int(margin * i)), (0, 255, 0), -1)
         else:
@@ -30,8 +30,8 @@ def drawInferences(values, names):
         draw = ImageDraw.Draw(img_pil)
         draw.text((0, margin + int(margin * (i)) + int(thickness / 2) - 10), names[i], font=font, fill=(b, g, r, a))
         blank = np.array(img_pil)
-        cv2.putText(blank, str(values[i]), (left_margin + 200, margin + int(margin * i) + int(thickness / 2)),
+        cv2.putText(blank, str(int(round(values[i] * 100))) + '%', (left_margin + 200, margin + int(margin * i) + int(thickness / 2)),
                     cv2.FONT_HERSHEY_SIMPLEX,
                     fontScale, fontColor, lineType)
 
-    cv2.imshow("Inferences", blank)
+    cv2.imshow("_", blank)

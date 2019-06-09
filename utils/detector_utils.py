@@ -56,7 +56,7 @@ def draw_box_on_image(num_hands_detect, score_thresh, scores, boxes, im_width, i
             p1 = (int(left), int(top))
             p2 = (int(right), int(bottom))
             cv2.rectangle(image_np, p1, p2, (77, 255, 9), 3, 1)
-            cv2.putText(image_np, "Hand " + str(int(scores[i] * 100)) + "%", (int(left), int(top) - 3),
+            cv2.putText(image_np, "Pyka " + str(int(scores[i] * 100)) + "%", (int(left), int(top) - 3),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), lineType=cv2.LINE_AA)
 
 

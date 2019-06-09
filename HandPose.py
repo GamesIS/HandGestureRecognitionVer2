@@ -14,8 +14,9 @@ import gui
 import monitoring as mon
 
 frame_processed = 0
-score_thresh = 0.27
-window_name = 'Camera'
+score_thresh = 0.5
+window_name = 'KAMEPA'
+cropped_window_name = 'ROI'
 
 CLASS_NO_GESTURE = "Нет жеста"
 
@@ -88,8 +89,8 @@ def worker(input_q, output_q, cropped_output_q, inferences_q, cap_params, frame_
 
 class Settings:
     threshold = score_thresh
-    fpsISEnabled = True
-    detailsISEnabled = True
+    fpsISEnabled = False
+    detailsISEnabled = False
     details_run = True
     countHands = 1
 
@@ -105,7 +106,7 @@ class HandPose:
     main = None
     recognition_started = False
     settings = Settings()
-    version_segm_cnn = "Нет жеста"
+    version_segm_cnn = ""
 
     def __init__(self, mainController):
         self.main = mainController
@@ -154,8 +155,8 @@ class HandPose:
         while cv2.getWindowProperty(window_name, 0) >= 0 and self.recognition_started:
             fi_q.put(finded_gest)
             if not self.settings.detailsISEnabled and self.settings.details_run:
-                cv2.destroyWindow('Cropped')
-                cv2.destroyWindow('Inferences')
+                cv2.destroyWindow(cropped_window_name)
+                cv2.destroyWindow('_')
                 self.settings.details_run = False
             if self.settings.fpsISEnabled:
                 start_time_millis = int(round(time.time() * 1000))
@@ -206,9 +207,9 @@ class HandPose:
             if cropped_output is not None:
                 if self.settings.detailsISEnabled:
                     cropped_output = cv2.cvtColor(cropped_output, cv2.COLOR_RGB2BGR)
-                    cv2.namedWindow('Cropped', cv2.WINDOW_NORMAL)
-                    cv2.resizeWindow('Cropped', 450, 300)
-                    cv2.imshow('Cropped', cropped_output)
+                    cv2.namedWindow(cropped_window_name, cv2.WINDOW_NORMAL)
+                    cv2.resizeWindow(cropped_window_name, 450, 300)
+                    cv2.imshow(cropped_window_name, cropped_output)
                     if cv2.waitKey(1) & 0xFF == ord('q'):
                         break
 

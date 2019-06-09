@@ -47,7 +47,7 @@ class MainController(QtWidgets.QMainWindow, design.Ui_HandGestureRecognitionSyst
         self.setupUi(self)  # Это нужно для инициализации нашего дизайна
         self.recognition = rec_class.HandPose(mainController=self)
         self.recognition.settings.threshold = float(self.trsh_segm_sldr.value() / 100)
-        self.recognition.version_segm_cnn = SEGM_CNN_VERSION_1
+        self.recognition.version_segm_cnn = SEGM_CNN_VERSION_2
         self.startDetection.clicked.connect(self.start_detection)
         self.setWindowIcon(QtGui.QIcon('icon.png'))
 
