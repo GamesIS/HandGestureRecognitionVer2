@@ -203,7 +203,7 @@ class Ui_HandGestureRecognitionSystem(object):
         self.rb_segm_2.setText(_translate("HandGestureRecognitionSystem", "2 (Точнее сегментирует, больше ошибок)"))
         self.thr_lbl_segm_val.setText(_translate("HandGestureRecognitionSystem", "0.5"))
         self.fps_enabled.setText(_translate("HandGestureRecognitionSystem", "Показывать счетчик FPS"))
-        self.send_json_group.setTitle(_translate("HandGestureRecognitionSystem", "Передача данных стороннему ПО (UDP)"))
+        self.send_json_group.setTitle(_translate("HandGestureRecognitionSystem", "Передача данных клиентскому ПО (UDP)"))
         self.cb_json.setText(_translate("HandGestureRecognitionSystem", "Передавать результаты в виде JSON (UTF-8)"))
         self.ip_host.setHtml(_translate("HandGestureRecognitionSystem", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
 "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"

@@ -295,7 +295,7 @@ p, li { white-space: pre-wrap; }
      </rect>
     </property>
     <property name="title">
-     <string>Передача данных стороннему ПО (UDP)</string>
+     <string>Передача данных клиентскому ПО (UDP)</string>
     </property>
     <widget class="QCheckBox" name="cb_json">
      <property name="geometry">
