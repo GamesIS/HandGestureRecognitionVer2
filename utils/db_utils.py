@@ -58,7 +58,7 @@ def get_new_gest_group(groups, unicues_groups, poses, gesture_group):
     return gesture_group
 
 def save_json_poses(object):
-    with open(POSES_JSON, 'w', encoding='utf-8') as json_file:
+    with open("poses_new.json", 'w', encoding='utf-8') as json_file:
         data = json.dumps(object.__dict__, ensure_ascii=False)
         json_file.write(data)
 
